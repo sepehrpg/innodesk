@@ -4,9 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +19,7 @@ fun ProjectManagementMainScreen(){
     AppTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             Box(Modifier.padding(innerPadding)){
-                Greeting(
+                Body(
                     name = "Project Management",
                     modifier = Modifier.padding(innerPadding)
                 )
@@ -32,7 +30,7 @@ fun ProjectManagementMainScreen(){
 
 
 @Composable
-private fun Greeting(name: String, modifier: Modifier = Modifier) {
+private fun Body(name: String, modifier: Modifier = Modifier) {
     Box(Modifier.fillMaxSize()){
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter){
             Image(painterResource(R.drawable.bottombar), contentDescription = "", contentScale = ContentScale.FillWidth)
@@ -42,8 +40,8 @@ private fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-private fun GreetingPreview() {
+private fun ProjectManagementMainScreenPreview() {
     AppTheme {
-        Greeting("Android")
+        Body("Android")
     }
 }

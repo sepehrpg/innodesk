@@ -1,12 +1,10 @@
 # Project Documentation
 
 ## Overview
-This project is a multi-module Android application designed for...
+This project is a multi-module Android application designed for Startup teams
 
 ## Modules
 1. **App Module**: Contains the main application logic.
-2. **Build-Logic**: Create custom plugin. [Read more](docs/feature-module1.md)
-3. **Feature Module 2**: Implements feature Y. [Read more](docs/feature-module2.md)
+2. **Build-Logic**: Create custom plugin. [Read more](build-logic/README.md)
 
-## Build Instructions
-To build the project, run:
+

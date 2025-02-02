@@ -1,123 +1,149 @@
-/*
- * Copyright 2022 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 
 package com.example.designsystem.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.rounded.Call
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.designsystem.icon.AppIcons
-import com.example.designsystem.theme.AppTheme
+import com.example.designsystem.theme.Blue20
 
-/**
- * Now in Android filled button with generic content slot. Wraps Material 3 [Button].
- *
- * @param onClick Will be called when the user clicks the button.
- * @param modifier Modifier to be applied to the button.
- * @param enabled Controls the enabled state of the button. When `false`, this button will not be
- * clickable and will appear disabled to accessibility services.
- * @param contentPadding The spacing values to apply internally between the container and the
- * content.
- * @param content The button content.
- */
+
+//App Button
+//..................................................................................................
 @Composable
-fun NiaButton(
+fun AppButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    buttonColors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = Blue20,
+    ),
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    border: BorderStroke? = null,
+    shape: Shape = ButtonDefaults.shape,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    interactionSource: MutableInteractionSource? = null,
     content: @Composable RowScope.() -> Unit,
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.onBackground,
-        ),
+        elevation = elevation,
+        border = border,
+        interactionSource = interactionSource,
+        colors = buttonColors,
         contentPadding = contentPadding,
         content = content,
+        shape = shape
     )
 }
-
-/**
- * Now in Android filled button with text and icon content slots.
- *
- * @param onClick Will be called when the user clicks the button.
- * @param modifier Modifier to be applied to the button.
- * @param enabled Controls the enabled state of the button. When `false`, this button will not be
- * clickable and will appear disabled to accessibility services.
- * @param text The button text label content.
- * @param leadingIcon The button leading icon content. Pass `null` here for no leading icon.
- */
 @Composable
-fun NiaButton(
-    onClick: () -> Unit,
+fun AppButtonWithIcon(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    text: @Composable () -> Unit,
+    buttonColors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = Blue20,
+    ),
+    shape: Shape = ButtonDefaults.shape,
+    customSpace: Boolean = false,
+    border: BorderStroke? = null,
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    interactionSource: MutableInteractionSource? = null,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    content: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
+    onClick: () -> Unit,
 ) {
-    NiaButton(
+    AppButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        contentPadding = if (leadingIcon != null) {
+        elevation = elevation,
+        interactionSource = interactionSource,
+        border = border,
+        buttonColors = buttonColors,
+        shape = shape,
+        contentPadding = contentPadding,
+        /*contentPadding = if (leadingIcon != null) {
             ButtonDefaults.ButtonWithIconContentPadding
         } else {
             ButtonDefaults.ContentPadding
-        },
+        },*/
     ) {
-        NiaButtonContent(
-            text = text,
+        ButtonContent(
+            customSpace = customSpace,
+            text = content,
             leadingIcon = leadingIcon,
         )
     }
 }
+//..................................................................................................
 
-/**
- * Now in Android outlined button with generic content slot. Wraps Material 3 [OutlinedButton].
- *
- * @param onClick Will be called when the user clicks the button.
- * @param modifier Modifier to be applied to the button.
- * @param enabled Controls the enabled state of the button. When `false`, this button will not be
- * clickable and will appear disabled to accessibility services.
- * @param contentPadding The spacing values to apply internally between the container and the
- * content.
- * @param content The button content.
- */
+
+
+
+//App Outline Button
+//..................................................................................................
 @Composable
-fun NiaOutlinedButton(
+fun AppOutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    shape: Shape = ButtonDefaults.shape,
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    colors: ButtonColors = ButtonDefaults.outlinedButtonColors(
+        contentColor = MaterialTheme.colorScheme.onBackground,
+    ),
+    border: BorderStroke = BorderStroke(
+        width = AppButtonDefaults.OutlinedButtonBorderWidth,
+        color = if (enabled) {
+            MaterialTheme.colorScheme.outline
+        } else {
+            MaterialTheme.colorScheme.onSurface.copy(
+                alpha = AppButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA,
+            )
+        },
+    ),
+    interactionSource: MutableInteractionSource? = null,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit,
 ) {
@@ -125,194 +151,429 @@ fun NiaOutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground,
-        ),
-        border = BorderStroke(
-            width = NiaButtonDefaults.OutlinedButtonBorderWidth,
-            color = if (enabled) {
-                MaterialTheme.colorScheme.outline
-            } else {
-                MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = NiaButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA,
-                )
-            },
-        ),
+        shape = shape,
+        elevation = elevation,
+        colors = colors,
+        border = border,
+        interactionSource = interactionSource,
         contentPadding = contentPadding,
         content = content,
     )
 }
 
-/**
- * Now in Android outlined button with text and icon content slots.
- *
- * @param onClick Will be called when the user clicks the button.
- * @param modifier Modifier to be applied to the button.
- * @param enabled Controls the enabled state of the button. When `false`, this button will not be
- * clickable and will appear disabled to accessibility services.
- * @param text The button text label content.
- * @param leadingIcon The button leading icon content. Pass `null` here for no leading icon.
- */
 @Composable
-fun NiaOutlinedButton(
+fun AppOutlinedButtonWithIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    text: @Composable () -> Unit,
+    customSpace: Boolean = false,
+    shape: Shape = ButtonDefaults.shape,
+    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
+    colors: ButtonColors = ButtonDefaults.outlinedButtonColors(
+        contentColor = Color.DarkGray,
+    ),
+    border: BorderStroke = BorderStroke(
+        width = AppButtonDefaults.OutlinedButtonBorderWidth,
+        color = if (enabled) {
+            MaterialTheme.colorScheme.outline
+        } else {
+            MaterialTheme.colorScheme.onSurface.copy(
+                alpha = AppButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA,
+            )
+        },
+    ),
+    interactionSource: MutableInteractionSource? = null,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    content: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
-    NiaOutlinedButton(
+    AppOutlinedButton(
         onClick = onClick,
         modifier = modifier,
+        shape = shape,
+        colors = colors,
+        elevation = elevation,
+        border = border,
+        interactionSource = interactionSource,
         enabled = enabled,
-        contentPadding = if (leadingIcon != null) {
-            ButtonDefaults.ButtonWithIconContentPadding
-        } else {
-            ButtonDefaults.ContentPadding
-        },
+        contentPadding = contentPadding,
     ) {
-        NiaButtonContent(
-            text = text,
+        ButtonContent(
+            customSpace = customSpace,
+            text = content,
             leadingIcon = leadingIcon,
         )
     }
 }
+//..................................................................................................
 
-/**
- * Now in Android text button with generic content slot. Wraps Material 3 [TextButton].
- *
- * @param onClick Will be called when the user clicks the button.
- * @param modifier Modifier to be applied to the button.
- * @param enabled Controls the enabled state of the button. When `false`, this button will not be
- * clickable and will appear disabled to accessibility services.
- * @param content The button content.
- */
+
+
+//App Text Button
+//..................................................................................................
 @Composable
-fun NiaTextButton(
+fun AppTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    colors: ButtonColors =  ButtonDefaults.textButtonColors(
+        contentColor = Color.DarkGray,
+    ),
     content: @Composable RowScope.() -> Unit,
 ) {
     TextButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground,
-        ),
+        colors = colors,
         content = content,
     )
 }
-
-/**
- * Now in Android text button with text and icon content slots.
- *
- * @param onClick Will be called when the user clicks the button.
- * @param modifier Modifier to be applied to the button.
- * @param enabled Controls the enabled state of the button. When `false`, this button will not be
- * clickable and will appear disabled to accessibility services.
- * @param text The button text label content.
- * @param leadingIcon The button leading icon content. Pass `null` here for no leading icon.
- */
 @Composable
-fun NiaTextButton(
+fun AppTextButtonWithIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    text: @Composable () -> Unit,
+    customSpace: Boolean = false,
+    content: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
-    NiaTextButton(
+    AppTextButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
     ) {
-        NiaButtonContent(
-            text = text,
+        ButtonContent(
+            customSpace = customSpace,
+            text = content,
+            leadingIcon = leadingIcon,
+        )
+    }
+
+}
+//..................................................................................................
+
+
+
+// App Elevated Button
+//..................................................................................................
+@Composable
+fun AppElevatedButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    elevation: ButtonElevation? = ButtonDefaults.elevatedButtonElevation(),
+    colors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+    ),
+    shape: Shape = ButtonDefaults.shape,
+    interactionSource: MutableInteractionSource? = null,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    content: @Composable RowScope.() -> Unit,
+) {
+    ElevatedButton(
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled,
+        elevation = elevation,
+        colors = colors,
+        shape = shape,
+        interactionSource = interactionSource,
+        contentPadding = contentPadding,
+        content = content,
+    )
+}
+
+// App Elevated Button with Icon
+@Composable
+fun AppElevatedButtonWithIcon(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    customSpace: Boolean = false,
+    elevation: ButtonElevation? = ButtonDefaults.elevatedButtonElevation(),
+    colors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = Color.Cyan,
+    ),
+    shape: Shape = ButtonDefaults.shape,
+    interactionSource: MutableInteractionSource? = null,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    content: @Composable () -> Unit,
+    leadingIcon: @Composable (() -> Unit)? = null,
+) {
+    AppElevatedButton(
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled,
+        elevation = elevation,
+        colors = colors,
+        shape = shape,
+        interactionSource = interactionSource,
+        contentPadding = contentPadding,
+    ) {
+        ButtonContent(
+            customSpace = customSpace,
+            text = content,
             leadingIcon = leadingIcon,
         )
     }
 }
+//..................................................................................................
 
-/**
- * Internal Now in Android button content layout for arranging the text label and leading icon.
- *
- * @param text The button text label content.
- * @param leadingIcon The button leading icon content. Default is `null` for no leading icon.Ï
- */
+
+
+//Content
+//..................................................................................................
 @Composable
-private fun NiaButtonContent(
+private fun ButtonContent(
+    customSpace: Boolean,
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
-    if (leadingIcon != null) {
-        Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) {
-            leadingIcon()
+    if(customSpace){
+
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start){
+            if (leadingIcon != null) {
+                Box(Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
+                    leadingIcon()
+                }
+            }
+            Box(Modifier.weight(8f), contentAlignment = Alignment.Center){
+                text()
+            }
+            Spacer(modifier = Modifier.weight(1f))
+        }
+
+    }
+    else{
+        if (leadingIcon != null) {
+            Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) {
+                leadingIcon()
+            }
+        }
+        Box(
+            Modifier
+                .padding(
+                    start = if (leadingIcon != null) {
+                        ButtonDefaults.IconSpacing
+                    } else {
+                        0.dp
+                    },
+                ),
+        ) {
+            text()
         }
     }
-    Box(
-        Modifier
-            .padding(
-                start = if (leadingIcon != null) {
-                    ButtonDefaults.IconSpacing
-                } else {
-                    0.dp
-                },
-            ),
-    ) {
-        text()
-    }
-}
 
-@ThemePreviews
-@Composable
-fun NiaButtonPreview() {
-    AppTheme {
-        AppBackground(modifier = Modifier.size(150.dp, 50.dp)) {
-            NiaButton(onClick = {}, text = { Text("Test button") })
-        }
-    }
-}
 
-@ThemePreviews
-@Composable
-fun NiaOutlinedButtonPreview() {
-    AppTheme {
-        AppBackground(modifier = Modifier.size(150.dp, 50.dp)) {
-            NiaOutlinedButton(onClick = {}, text = { Text("Test button") })
-        }
-    }
 }
+//..................................................................................................
 
-@ThemePreviews
-@Composable
-fun NiaButtonPreview2() {
-    AppTheme {
-        AppBackground(modifier = Modifier.size(150.dp, 50.dp)) {
-            NiaButton(onClick = {}, text = { Text("Test button") })
-        }
-    }
-}
 
-@ThemePreviews
+
+
+
+
+
+@Preview(showBackground = true,showSystemUi = true, locale = "en")
 @Composable
-fun NiaButtonLeadingIconPreview() {
-    AppTheme {
-        AppBackground(modifier = Modifier.size(150.dp, 50.dp)) {
-            NiaButton(
+private fun AppButtonPreview(){
+    Column(Modifier.fillMaxSize()) {
+        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            AppButton(
                 onClick = {},
-                text = { Text("Test button") },
-                leadingIcon = { Icon(imageVector = AppIcons.Add, contentDescription = null) },
+                content = { Text("HELLO WORK") },
+                modifier = Modifier.fillMaxWidth(),
+                elevation =  ButtonDefaults.buttonElevation(defaultElevation=10.dp),
+                buttonColors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                contentPadding = PaddingValues(15.dp),
+                enabled = true,
+                border = null,
+                shape = RoundedCornerShape(10.dp),
             )
         }
+
+        Box(Modifier.fillMaxWidth().padding(horizontal = 60.dp, vertical = 10.dp)){
+            AppButtonWithIcon(
+                leadingIcon = {Icon(Icons.Rounded.Call,contentDescription = "")},
+                onClick = {},
+                content = { Text("HELLO WORK") },
+                enabled = true,
+                contentPadding = PaddingValues(horizontal = 20.dp),
+                buttonColors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                border = null,
+                elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
+                modifier = Modifier.fillMaxWidth(),
+                customSpace = true,
+            )
+        }
+
+        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            AppOutlinedButton(
+                onClick = {},
+                content = { Text(text = "HELLO WORK") },
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = Color.LightGray,
+                ),
+                enabled = true,
+                border = BorderStroke(
+                    width = 2.dp,
+                    color = Color.Cyan,
+                ),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(2.dp),
+                shape = RoundedCornerShape(20.dp)
+            )
+        }
+
+        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            AppOutlinedButtonWithIcon(
+                onClick = {},
+                content = { Text(text = "HELLO WORK") },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Red
+                ),
+                enabled = true,
+                border = BorderStroke(
+                    width = 2.dp,
+                    color = Color.Cyan,
+                ),
+                customSpace = false,
+                elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
+                shape = RectangleShape,
+                leadingIcon = { Icon(Icons.Rounded.Call,contentDescription = "") },
+            )
+        }
+
+        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            AppTextButton(
+                onClick = {},
+                content = { Text(text = "HELLO WORK") },
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+
+        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            AppTextButtonWithIcon(
+                onClick = {},
+                content = { Text(text = "HELLO WORK") },
+                modifier = Modifier.fillMaxWidth(),
+                leadingIcon = { Icon(Icons.Rounded.Call,contentDescription = "") },
+            )
+        }
+
+        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            AppElevatedButton(
+                onClick = {},
+                content = { Text(text = "HELLO WORK") },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Red
+                ),
+                enabled = true,
+                elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
+                shape = RectangleShape,
+            )
+        }
+
+        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            AppElevatedButtonWithIcon(
+                onClick = { /* Do something */ },
+                leadingIcon = { Icon(Icons.Default.Favorite, contentDescription = null) },
+                content = { Text("Button With Icon") }
+            )
+        }
+
+
+        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            Row(Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceBetween){
+                AppFloatingActionButton(
+                    onClick = { /* Do something */ },
+                    content = { Icon(Icons.Default.Add, contentDescription = null) }
+                )
+                AppExtendedFloatingActionButton(
+                    onClick = { /* Do something */ },
+                    icon = { Icon(Icons.Default.Check, contentDescription = null) },
+                    text = { Text("Extended FAB") }
+                )
+            }
+        }
     }
+
+
+
+
+
+    /*CompositionLocalProvider(AppDirection.appDirectionLayoutProperty("fa")) {
+        Column(Modifier.fillMaxSize()) {
+
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp)){
+                AppButton(onClick = {
+
+                },content = {
+                    Text("HELLO WORK")
+                }, modifier = Modifier.fillMaxWidth())
+            }
+
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 60.dp, vertical = 10.dp)){
+                AppButton(leadingIcon = {
+                    Icon(
+                        AppIcons.Call,
+                        contentDescription = ""
+                    )
+                },onClick = {
+
+                }, text = {
+                    Text("HELLO WORK")
+                }, modifier = Modifier.fillMaxWidth(), customSpace = true)
+            }
+
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp)){
+                AppOutlinedButton(onClick = {}, content = {
+                    Text(text = "HELLO WORK")
+                }, modifier = Modifier.fillMaxWidth())
+            }
+
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp)){
+                AppTextButton(onClick = {}, content = {
+                    Text(text = "HELLO WORK")
+                }, modifier = Modifier.fillMaxWidth())
+            }
+
+
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 60.dp, vertical = 10.dp)){
+                AppCurveButton(leadingIcon = {
+                    Icon(
+                        AppIcons.Call,
+                        contentDescription = ""
+                    )
+                },onClick = {
+
+                }, text = {
+                    Text("HELLO WORK")
+                }, modifier = Modifier.fillMaxWidth(), customSpace = true)
+            }
+        }
+    }*/
 }
 
-/**
- * Now in Android button default values.
- */
-object NiaButtonDefaults {
+
+
+object AppButtonDefaults {
     // TODO: File bug
     // OutlinedButton border color doesn't respect disabled state by default
     const val DISABLED_OUTLINED_BUTTON_BORDER_ALPHA = 0.12f

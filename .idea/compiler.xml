@@ -5,7 +5,6 @@
       <module name="Innodesk.build-logic.convention" target="17" />
       <module name="Innodesk.build-logic.convention.main" target="17" />
       <module name="Innodesk.build-logic.convention.test" target="17" />
-      <module name="Innodesk.mylibrary" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>

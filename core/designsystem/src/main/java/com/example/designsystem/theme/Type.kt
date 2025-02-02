@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 /**
  * Now in Android typography.
  */
-internal val NiaTypography = Typography(
+internal val AppTypography = Typography(
     displayLarge = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 57.sp,
@@ -74,7 +74,7 @@ internal val NiaTypography = Typography(
         letterSpacing = 0.1.sp,
     ),
     titleSmall = TextStyle(
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Bold,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp,

@@ -1,19 +1,3 @@
-/*
- * Copyright 2022 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.designsystem.component
 
 import android.content.res.Configuration
@@ -57,7 +41,7 @@ fun AppBackground(
     Surface(
         color = if (color == Color.Unspecified) Color.Transparent else color,
         tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
     ) {
         CompositionLocalProvider(LocalAbsoluteTonalElevation provides 0.dp) {
             content()
@@ -87,11 +71,10 @@ fun AppGradientBackground(
         } else {
             gradientColors.container
         },
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
     ) {
         Box(
             Modifier
-                .fillMaxSize()
                 .drawWithCache {
                     // Compute the start and end coordinates such that the gradients are angled 11.06
                     // degrees off the vertical axis
@@ -101,8 +84,13 @@ fun AppGradientBackground(
                             .toFloat(),
                     )
 
+                    //vertical
                     val start = Offset(size.width / 2 + offset / 2, 0f)
                     val end = Offset(size.width / 2 - offset / 2, size.height)
+
+                    //horizontal
+                    //val start = Offset(0f, size.height / 2)
+                    //val end = Offset(size.width, size.height / 2)
 
                     // Create the top gradient that fades out after the halfway point vertically
                     val topGradient = Brush.linearGradient(
@@ -138,6 +126,54 @@ fun AppGradientBackground(
         }
     }
 }
+
+
+
+@Composable
+fun AppCircleGradientBackground(
+    modifier: Modifier = Modifier,
+    gradientColors: GradientColors = LocalGradientColors.current,
+    content: @Composable () -> Unit,
+) {
+    val currentTopColor by rememberUpdatedState(gradientColors.top)
+    val currentBottomColor by rememberUpdatedState(gradientColors.bottom)
+    Surface(
+        color = if (gradientColors.container == Color.Unspecified) {
+            Color.Transparent
+        } else {
+            gradientColors.container
+        },
+        modifier = modifier.fillMaxSize(),
+    ) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .drawWithCache {
+                val center = Offset(size.width / 2, size.height / 2)
+                val radius = size.minDimension / 2
+
+                val radialGradient = Brush.radialGradient(
+                    colors = listOf(
+                        if (currentTopColor == Color.Unspecified) Color.Transparent else currentTopColor,
+                        if (currentBottomColor == Color.Unspecified) Color.Transparent else currentBottomColor,
+                    ),
+                    center = center,
+                    radius = radius
+                )
+
+                onDrawBehind {
+                    drawRect(radialGradient)
+                }
+            },
+        ) {
+            content()
+        }
+    }
+}
+
+
+
+
 
 /**
  * Multipreview annotation that represents light and dark themes. Add this annotation to a

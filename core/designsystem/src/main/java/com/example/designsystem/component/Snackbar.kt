@@ -1,5 +1,4 @@
-package com.example.designsystem.component
-
+package co.koja.app.ui.component.common
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,18 +19,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.designsystem.theme.Red20
+import com.example.designsystem.theme.Blue20
+import com.example.designsystem.theme.Green20
+
 
 
 @Composable
-fun AppSnackBarPrimaryResponseMessage(status:String, message: String,typeComponent:String?=null, performAction: () -> Unit) {
-    Column(Modifier.fillMaxHeight(),verticalArrangement = Arrangement.Bottom) {
+fun AppSnackBarPrimaryResponseMessage(status:String, message: String, performAction: () -> Unit) {
+    Column(Modifier.fillMaxHeight(),verticalArrangement = Arrangement.Top) {
         Box(
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 0.dp, vertical = 0.dp)
+                .padding(horizontal = 20.dp, vertical = 20.dp)
                 .fillMaxWidth()
                 .background(
-                    color = if (status == "ok") Color.Green else Color.Red,
+                    color = if (status == "ok") Green20 else Red20,
                     shape = RoundedCornerShape(10.dp)
                 )
         ) {
@@ -65,7 +68,6 @@ fun AppSnackBarPrimaryResponseMessage(status:String, message: String,typeCompone
 
 
 
-/*
 @Composable
 fun AppSnackBarSecondaryResponseMessage(status:String, message: String, performAction: () -> Unit) {
     Column(Modifier.fillMaxHeight(),verticalArrangement = Arrangement.Bottom) {
@@ -74,7 +76,7 @@ fun AppSnackBarSecondaryResponseMessage(status:String, message: String, performA
                 .fillMaxWidth()
                 //.padding(horizontal = 20.dp, vertical = 20.dp)
                 //.background(color = if (status=="ok") doneColorSnackBAr else errorColorSnackBar, shape = RoundedCornerShape(10.dp))
-                .background(color = if (status == "ok") AppColorSuccessSnackBar else AppColorErrorSnackBar)
+                .background(color = if (status == "ok") Green20 else Red20)
         ) {
             Row(
                 Modifier.padding(10.dp),
@@ -113,7 +115,7 @@ fun AppSnackBarTertiaryResponseMessageTypeThree(status:String, message: String, 
             Modifier
                 //.padding(horizontal = 20.dp, vertical = 20.dp)
                 //.background(color = if (status=="ok") doneColorSnackBAr else errorColorSnackBar, shape = RoundedCornerShape(10.dp))
-                .background(color = if (status=="ok" || status=="200") AppColorSuccessSnackBar else if(status=="help.txt") Color(0xFF1971C2) else AppColorErrorSnackBar)
+                .background(color = if (status=="ok" || status=="200") Green20 else if(status=="help.txt") Color(0xFF1971C2) else Red20)
         ) {
             Row(
                 Modifier
@@ -146,6 +148,8 @@ fun AppSnackBarTertiaryResponseMessageTypeThree(status:String, message: String, 
 
 
 
+
+
 @Composable
 fun AppSnackBarExitApplication(status:String, message: String, performAction: () -> Unit) {
     Column(verticalArrangement = Arrangement.Bottom) {
@@ -153,7 +157,7 @@ fun AppSnackBarExitApplication(status:String, message: String, performAction: ()
             Modifier
                 //.padding(horizontal = 20.dp, vertical = 20.dp)
                 //.background(color = if (status=="ok") doneColorSnackBAr else errorColorSnackBar, shape = RoundedCornerShape(10.dp))
-                .background(color = AppPrimaryLightColor)
+                .background(color = Blue20)
         ) {
             Row(
                 Modifier
@@ -184,4 +188,4 @@ fun AppSnackBarExitApplication(status:String, message: String, performAction: ()
     }
 
 
-}*/
+}

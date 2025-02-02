@@ -16,9 +16,13 @@
 
 package com.example.designsystem.component
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -28,9 +32,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.designsystem.icon.AppIcons
-import com.example.designsystem.theme.AppTheme
+import com.example.designsystem.theme.Orange20
+
 
 /**
  * Now in Android filter chip with included leading checked icon as well as text content slot.
@@ -43,8 +49,84 @@ import com.example.designsystem.theme.AppTheme
  * @param label The text label content.
  */
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
-fun NiaFilterChip(
+fun AppFilterChipType2(
+    selected: Boolean,
+    onSelectedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    label: @Composable () -> Unit,
+) {
+    FilterChip(
+        selected = selected,
+        onClick = { onSelectedChange(!selected) },
+        label = {
+            ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(
+                fontWeight = FontWeight.Bold
+            )) {
+                label()
+            }
+        },
+        modifier = modifier,
+        enabled = enabled,
+        leadingIcon = if (selected) {
+            {
+                Icon(
+                    imageVector = Icons.Rounded.Check,
+                    contentDescription = null,
+                    modifier = Modifier.size(15.dp)
+                )
+            }
+        } else {
+            {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = null,
+                    modifier = Modifier.size(15.dp)
+                )
+            }
+        },
+        shape = CircleShape,
+        border = FilterChipDefaults.filterChipBorder(
+            borderColor = Orange20,
+            selectedBorderColor = Color(0xFF152B76),
+            disabledBorderColor = Orange20,
+            disabledSelectedBorderColor = MaterialTheme.colorScheme.onBackground.copy(
+                alpha = NiaChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
+            ),
+            selectedBorderWidth = NiaChipDefaults.ChipBorderWidth,
+            enabled = enabled,
+            selected = selected
+        ),
+        colors = FilterChipDefaults.filterChipColors(
+            labelColor = Orange20,
+            iconColor = Orange20,
+            disabledContainerColor = if (selected) {
+                Orange20.copy(
+                    alpha = NiaChipDefaults.DISABLED_CHIP_CONTAINER_ALPHA,
+                )
+            }else {
+                Color.Transparent
+            },
+            disabledLabelColor = Orange20.copy(
+                alpha = NiaChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
+            ),
+            disabledLeadingIconColor = Orange20.copy(
+                alpha = NiaChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
+            ),
+            selectedContainerColor = Color(0xFFE1E8FF),
+            selectedLabelColor = Color(0xFF152B76),
+            selectedLeadingIconColor = Color(0xFF152B76),
+            containerColor = Orange20.copy(
+                alpha = NiaChipDefaults.DISABLED_CHIP_CONTAINER_ALPHA,
+            )
+        ),
+    )
+}
+
+
+
+@Composable
+fun AppFilterChip(
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -64,7 +146,7 @@ fun NiaFilterChip(
         leadingIcon = if (selected) {
             {
                 Icon(
-                    imageVector = AppIcons.Check,
+                    imageVector = Icons.Rounded.Check,
                     contentDescription = null,
                 )
             }
@@ -73,11 +155,9 @@ fun NiaFilterChip(
         },
         shape = CircleShape,
         border = FilterChipDefaults.filterChipBorder(
-            borderColor = MaterialTheme.colorScheme.onBackground,
-            selectedBorderColor = MaterialTheme.colorScheme.onBackground,
-            disabledBorderColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = NiaChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
-            ),
+            borderColor = Color.LightGray,
+            selectedBorderColor = Color(0xFF152B76),
+            disabledBorderColor = Color(0xFFEEEEEE),
             disabledSelectedBorderColor = MaterialTheme.colorScheme.onBackground.copy(
                 alpha = NiaChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
@@ -86,8 +166,8 @@ fun NiaFilterChip(
             selected = selected
         ),
         colors = FilterChipDefaults.filterChipColors(
-            labelColor = MaterialTheme.colorScheme.onBackground,
-            iconColor = MaterialTheme.colorScheme.onBackground,
+            labelColor = Color.Gray,
+            iconColor = Color.Gray,
             disabledContainerColor = if (selected) {
                 MaterialTheme.colorScheme.onBackground.copy(
                     alpha = NiaChipDefaults.DISABLED_CHIP_CONTAINER_ALPHA,
@@ -101,21 +181,26 @@ fun NiaFilterChip(
             disabledLeadingIconColor = MaterialTheme.colorScheme.onBackground.copy(
                 alpha = NiaChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
-            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            selectedLabelColor = MaterialTheme.colorScheme.onBackground,
-            selectedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
+            selectedContainerColor = Color(0xFFE1E8FF),
+            selectedLabelColor = Color(0xFF152B76),
+            selectedLeadingIconColor = Color(0xFF152B76),
         ),
     )
 }
 
-@ThemePreviews
+
+@Preview(showBackground = true)
 @Composable
 fun ChipPreview() {
-    AppTheme {
-        AppBackground(modifier = Modifier.size(80.dp, 20.dp)) {
-            NiaFilterChip(selected = true, onSelectedChange = {}) {
-                Text("Chip")
-            }
+    Column(Modifier.fillMaxSize()){
+        AppFilterChip(selected = false, onSelectedChange = {}) {
+            Text("Chip")
+        }
+        AppFilterChipType2(selected = true, onSelectedChange = {}) {
+            Text("Chip")
+        }
+        AppFilterChipType2(selected = false, onSelectedChange = {}) {
+            Text("Chip")
         }
     }
 }

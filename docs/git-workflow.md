@@ -100,7 +100,7 @@ releases, and hotfixes.
   git push origin --delete release/<version-number>
   ```
 
-### 5. Creating a Hotfix Branch
+### 5. Creating a Hotfix Branch If You Have Bug In Main Branch
 - Create a hotfix branch from `main`:
   ```bash
   git checkout -b hotfix/<issue-name> main

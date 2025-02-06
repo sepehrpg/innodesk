@@ -22,6 +22,7 @@ import com.example.designsystem.theme.GradientColors
 import com.example.designsystem.theme.LocalBackgroundTheme
 import com.example.designsystem.theme.LocalGradientColors
 import com.example.designsystem.theme.AppTheme
+import com.example.designsystem.theme.ThemePreviews
 import kotlin.math.tan
 
 /**
@@ -80,7 +81,7 @@ fun AppGradientBackground(
                     // degrees off the vertical axis
                     val offset = size.height * tan(
                         Math
-                            .toRadians(11.06)
+                            .toRadians(40.06)
                             .toFloat(),
                     )
 
@@ -113,6 +114,68 @@ fun AppGradientBackground(
                         },
                         start = start,
                         end = end,
+                    )
+
+                    onDrawBehind {
+                        // There is overlap here, so order is important
+                        drawRect(topGradient)
+                        drawRect(bottomGradient)
+                    }
+                },
+        ) {
+            content()
+        }
+    }
+}
+
+
+@Composable
+fun AppHorizontalGradientBackground(
+    modifier: Modifier = Modifier,
+    gradientColors: GradientColors = LocalGradientColors.current,
+    content: @Composable () -> Unit,
+) {
+    val currentTopColor by rememberUpdatedState(gradientColors.top)
+    val currentBottomColor by rememberUpdatedState(gradientColors.bottom)
+    Surface(
+        color = if (gradientColors.container == Color.Unspecified) {
+            Color.Transparent
+        } else {
+            gradientColors.container
+        },
+        modifier = modifier,
+    ) {
+        Box(
+            Modifier
+                .drawWithCache {
+                    // Compute the start and end coordinates for the horizontal gradient
+                    val offset = size.width * tan(
+                        Math
+                            .toRadians(11.06)
+                            .toFloat(),
+                    )
+
+                    // Create the top gradient that fades out after the halfway point horizontally
+                    val topGradient = Brush.horizontalGradient(
+                        0f to if (currentTopColor == Color.Unspecified) {
+                            Color.Transparent
+                        } else {
+                            currentTopColor
+                        },
+                        0.724f to Color.Transparent,
+                        startX = 0f,
+                        endX = size.width + offset,
+                    )
+                    // Create the bottom gradient that fades in before the halfway point horizontally
+                    val bottomGradient = Brush.horizontalGradient(
+                        0.2552f to Color.Transparent,
+                        1f to if (currentBottomColor == Color.Unspecified) {
+                            Color.Transparent
+                        } else {
+                            currentBottomColor
+                        },
+                        startX = 0f,
+                        endX = size.width + offset,
                     )
 
                     onDrawBehind {
@@ -174,19 +237,9 @@ fun AppCircleGradientBackground(
 
 
 
-
-/**
- * Multipreview annotation that represents light and dark themes. Add this annotation to a
- * composable to render the both themes.
- */
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
-annotation class ThemePreviews
-
-
 @ThemePreviews
 @Composable
-fun BackgroundDefault() {
+private fun BackgroundDefault() {
     AppTheme(disableDynamicTheming = true) {
         AppBackground(Modifier.size(100.dp), content = {})
     }
@@ -194,7 +247,7 @@ fun BackgroundDefault() {
 
 @ThemePreviews
 @Composable
-fun BackgroundDynamic() {
+private fun BackgroundDynamic() {
     AppTheme(disableDynamicTheming = false) {
         AppBackground(Modifier.size(100.dp), content = {})
     }
@@ -202,7 +255,7 @@ fun BackgroundDynamic() {
 
 @ThemePreviews
 @Composable
-fun BackgroundAndroid() {
+private fun BackgroundAndroid() {
     AppTheme(androidTheme = true) {
         AppBackground(Modifier.size(100.dp), content = {})
     }
@@ -210,7 +263,7 @@ fun BackgroundAndroid() {
 
 @ThemePreviews
 @Composable
-fun GradientBackgroundDefault() {
+private fun GradientBackgroundDefault() {
     AppTheme(disableDynamicTheming = true) {
         AppGradientBackground(Modifier.size(100.dp), content = {})
     }
@@ -218,7 +271,7 @@ fun GradientBackgroundDefault() {
 
 @ThemePreviews
 @Composable
-fun GradientBackgroundDynamic() {
+private fun GradientBackgroundDynamic() {
     AppTheme(disableDynamicTheming = false) {
         AppGradientBackground(Modifier.size(100.dp), content = {})
     }
@@ -227,7 +280,7 @@ fun GradientBackgroundDynamic() {
 
 @ThemePreviews
 @Composable
-fun GradientBackgroundAndroid() {
+private fun GradientBackgroundAndroid() {
     AppTheme(androidTheme = true) {
         AppGradientBackground(Modifier.size(100.dp), content = {})
     }

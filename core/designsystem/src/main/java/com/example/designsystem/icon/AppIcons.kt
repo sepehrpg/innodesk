@@ -25,6 +25,7 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.Bookmarks
+import androidx.compose.material.icons.rounded.Call
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Grid3x3
@@ -41,6 +42,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
  */
 object AppIcons {
     val Add = Icons.Rounded.Add
+    val Call = Icons.Rounded.Call
     val ArrowBack = Icons.Rounded.ArrowBack
     val Bookmark = Icons.Rounded.Bookmark
     val BookmarkBorder = Icons.Rounded.BookmarkBorder

@@ -26,16 +26,13 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +40,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.designsystem.config.direction.AppDirection
+import com.example.designsystem.config.direction.LayoutDirections
 import com.example.designsystem.theme.Blue20
 
 
@@ -378,202 +377,124 @@ private fun ButtonContent(
 @Preview(showBackground = true,showSystemUi = true, locale = "en")
 @Composable
 private fun AppButtonPreview(){
-    Column(Modifier.fillMaxSize()) {
-        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
-            AppButton(
-                onClick = {},
-                content = { Text("HELLO WORK") },
-                modifier = Modifier.fillMaxWidth(),
-                elevation =  ButtonDefaults.buttonElevation(defaultElevation=10.dp),
-                buttonColors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-                contentPadding = PaddingValues(15.dp),
-                enabled = true,
-                border = null,
-                shape = RoundedCornerShape(10.dp),
-            )
-        }
-
-        Box(Modifier.fillMaxWidth().padding(horizontal = 60.dp, vertical = 10.dp)){
-            AppButtonWithIcon(
-                leadingIcon = {Icon(Icons.Rounded.Call,contentDescription = "")},
-                onClick = {},
-                content = { Text("HELLO WORK") },
-                enabled = true,
-                contentPadding = PaddingValues(horizontal = 20.dp),
-                buttonColors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
-                border = null,
-                elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
-                modifier = Modifier.fillMaxWidth(),
-                customSpace = true,
-            )
-        }
-
-        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
-            AppOutlinedButton(
-                onClick = {},
-                content = { Text(text = "HELLO WORK") },
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = Color.LightGray,
-                ),
-                enabled = true,
-                border = BorderStroke(
-                    width = 2.dp,
-                    color = Color.Cyan,
-                ),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(2.dp),
-                shape = RoundedCornerShape(20.dp)
-            )
-        }
-
-        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
-            AppOutlinedButtonWithIcon(
-                onClick = {},
-                content = { Text(text = "HELLO WORK") },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Red
-                ),
-                enabled = true,
-                border = BorderStroke(
-                    width = 2.dp,
-                    color = Color.Cyan,
-                ),
-                customSpace = false,
-                elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
-                shape = RectangleShape,
-                leadingIcon = { Icon(Icons.Rounded.Call,contentDescription = "") },
-            )
-        }
-
-        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
-            AppTextButton(
-                onClick = {},
-                content = { Text(text = "HELLO WORK") },
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
-
-        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
-            AppTextButtonWithIcon(
-                onClick = {},
-                content = { Text(text = "HELLO WORK") },
-                modifier = Modifier.fillMaxWidth(),
-                leadingIcon = { Icon(Icons.Rounded.Call,contentDescription = "") },
-            )
-        }
-
-        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
-            AppElevatedButton(
-                onClick = {},
-                content = { Text(text = "HELLO WORK") },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Red
-                ),
-                enabled = true,
-                elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
-                shape = RectangleShape,
-            )
-        }
-
-        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
-            AppElevatedButtonWithIcon(
-                onClick = { /* Do something */ },
-                leadingIcon = { Icon(Icons.Default.Favorite, contentDescription = null) },
-                content = { Text("Button With Icon") }
-            )
-        }
-
-
-        Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
-            Row(Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceBetween){
-                AppFloatingActionButton(
-                    onClick = { /* Do something */ },
-                    content = { Icon(Icons.Default.Add, contentDescription = null) }
-                )
-                AppExtendedFloatingActionButton(
-                    onClick = { /* Do something */ },
-                    icon = { Icon(Icons.Default.Check, contentDescription = null) },
-                    text = { Text("Extended FAB") }
+    CompositionLocalProvider(AppDirection.appLayoutDirectionProvider(LayoutDirections.LTR)) {
+        Column(Modifier.fillMaxSize()) {
+            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+                AppButton(
+                    onClick = {},
+                    content = { Text("HELLO WORK") },
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation =  ButtonDefaults.buttonElevation(defaultElevation=10.dp),
+                    buttonColors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                    contentPadding = PaddingValues(15.dp),
+                    enabled = true,
+                    border = null,
+                    shape = RoundedCornerShape(10.dp),
                 )
             }
+
+            Box(Modifier.fillMaxWidth().padding(horizontal = 60.dp, vertical = 10.dp)){
+                AppButtonWithIcon(
+                    leadingIcon = {Icon(Icons.Rounded.Call,contentDescription = "")},
+                    onClick = {},
+                    content = { Text("HELLO WORK") },
+                    enabled = true,
+                    contentPadding = PaddingValues(horizontal = 20.dp),
+                    buttonColors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                    border = null,
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
+                    modifier = Modifier.fillMaxWidth(),
+                    customSpace = true,
+                )
+            }
+
+            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+                AppOutlinedButton(
+                    onClick = {},
+                    content = { Text(text = "HELLO WORK") },
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.LightGray,
+                    ),
+                    enabled = true,
+                    border = BorderStroke(
+                        width = 2.dp,
+                        color = Color.Cyan,
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(2.dp),
+                    shape = RoundedCornerShape(20.dp)
+                )
+            }
+
+            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+                AppOutlinedButtonWithIcon(
+                    onClick = {},
+                    content = { Text(text = "HELLO WORK") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.White,
+                        contentColor = Color.Red
+                    ),
+                    enabled = true,
+                    border = BorderStroke(
+                        width = 2.dp,
+                        color = Color.Cyan,
+                    ),
+                    customSpace = false,
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
+                    shape = RectangleShape,
+                    leadingIcon = { Icon(Icons.Rounded.Call,contentDescription = "") },
+                )
+            }
+
+            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+                AppTextButton(
+                    onClick = {},
+                    content = { Text(text = "HELLO WORK") },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+
+            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+                AppTextButtonWithIcon(
+                    onClick = {},
+                    content = { Text(text = "HELLO WORK") },
+                    modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = { Icon(Icons.Rounded.Call,contentDescription = "") },
+                )
+            }
+
+            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+                AppElevatedButton(
+                    onClick = {},
+                    content = { Text(text = "HELLO WORK") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.White,
+                        contentColor = Color.Red
+                    ),
+                    enabled = true,
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
+                    shape = RectangleShape,
+                )
+            }
+
+            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+                AppElevatedButtonWithIcon(
+                    onClick = {},
+                    leadingIcon = { Icon(Icons.Default.Favorite, contentDescription = null) },
+                    content = { Text("Button With Icon") }
+                )
+            }
+
         }
     }
-
-
-
-
-
-    /*CompositionLocalProvider(AppDirection.appDirectionLayoutProperty("fa")) {
-        Column(Modifier.fillMaxSize()) {
-
-            Box(Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 10.dp)){
-                AppButton(onClick = {
-
-                },content = {
-                    Text("HELLO WORK")
-                }, modifier = Modifier.fillMaxWidth())
-            }
-
-            Box(Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 60.dp, vertical = 10.dp)){
-                AppButton(leadingIcon = {
-                    Icon(
-                        AppIcons.Call,
-                        contentDescription = ""
-                    )
-                },onClick = {
-
-                }, text = {
-                    Text("HELLO WORK")
-                }, modifier = Modifier.fillMaxWidth(), customSpace = true)
-            }
-
-            Box(Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 10.dp)){
-                AppOutlinedButton(onClick = {}, content = {
-                    Text(text = "HELLO WORK")
-                }, modifier = Modifier.fillMaxWidth())
-            }
-
-            Box(Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 10.dp)){
-                AppTextButton(onClick = {}, content = {
-                    Text(text = "HELLO WORK")
-                }, modifier = Modifier.fillMaxWidth())
-            }
-
-
-            Box(Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 60.dp, vertical = 10.dp)){
-                AppCurveButton(leadingIcon = {
-                    Icon(
-                        AppIcons.Call,
-                        contentDescription = ""
-                    )
-                },onClick = {
-
-                }, text = {
-                    Text("HELLO WORK")
-                }, modifier = Modifier.fillMaxWidth(), customSpace = true)
-            }
-        }
-    }*/
 }
 
 
 
-object AppButtonDefaults {
+private object AppButtonDefaults {
     // TODO: File bug
     // OutlinedButton border color doesn't respect disabled state by default
     const val DISABLED_OUTLINED_BUTTON_BORDER_ALPHA = 0.12f

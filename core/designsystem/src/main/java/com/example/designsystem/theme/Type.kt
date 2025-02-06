@@ -21,9 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-/**
- * Now in Android typography.
- */
+
 internal val AppTypography = Typography(
     displayLarge = TextStyle(
         fontWeight = FontWeight.Normal,

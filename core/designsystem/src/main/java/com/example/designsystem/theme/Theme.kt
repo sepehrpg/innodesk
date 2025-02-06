@@ -240,7 +240,7 @@ fun AppTheme(
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = NiaTypography,
+            typography = AppTypography,
             content = content,
         )
     }

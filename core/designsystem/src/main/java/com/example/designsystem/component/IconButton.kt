@@ -301,7 +301,7 @@ private fun AppIconButtonsPreview() {
                 containerColor = Color.Transparent,
                 contentColor = Color.DarkGray
             ),
-            boxModifier = Modifier.shadow(4.dp,RoundedCornerShape(12.dp)).background(Brush.horizontalGradient(listOf(Color(0xFFEEEEEE),Color.White)),RoundedCornerShape(12.dp)),
+            boxModifier = Modifier.shadow(2.dp,RoundedCornerShape(12.dp)).background(Brush.horizontalGradient(listOf(Color(0xFFEEEEEE),Color.White)),RoundedCornerShape(12.dp)),
         ) {
             Icon(
                 imageVector = Icons.Filled.Settings,

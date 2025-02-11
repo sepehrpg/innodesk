@@ -20,37 +20,20 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.database.dao.ArticlesDao
-import com.example.database.model.ArticlesEntity
 import com.example.database.utils.InstantConverter
 
 
 @Database(
     entities = [
-        ArticlesEntity::class,
+        //ArticlesEntity::class,
     ],
-    version = 2,
-    exportSchema = true,
-    autoMigrations = [
-        AutoMigration(from = 1, to = 2),
-        //AutoMigration(from = 2, to = 3, spec = DatabaseMigrations.Schema2to3::class),
-    ]
+    version = 1,
 )
 @TypeConverters(
     InstantConverter::class,
 )
 abstract class RoomDb : RoomDatabase() {
-    abstract fun articlesDao(): ArticlesDao
+    //abstract fun articlesDao(): ArticlesDao
 }
 
 
-/** for migrations is better than below code */
-/*
-val migration1to2 = object : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        // Define your migration SQL statements here
-    }
-}
-val db = Room.databaseBuilder(context, YourDatabaseClass::class.java, "your_database_name")
-    .addMigration(migration1to2)
-    .build()*/

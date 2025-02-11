@@ -6,7 +6,33 @@ staticCompositionLocalOf
 compositionLocalOf
 CompositionLocalProvider
 drawWithCache
+val scope = rememberCoroutineScope()
+buildList
+split,preview build tools
 
+data class AppCustomLeadingIconTabItem(
+    val text: @Composable () -> Unit,
+    val icon: @Composable () -> Unit,
+    var selected: MutableState<Boolean> = mutableStateOf(false),
+    val modifier: Modifier? = null,
+    val enabled: Boolean? = null,
+    val selectedContentColor: Color? = null,
+    val unselectedContentColor: Color? = null,
+    val interactionSource: MutableInteractionSource? = null
+){
+    fun nonSelected(){
+        selected.value  = false
+    }
+    fun isSelected(){
+        selected.value  = true
+    }
+    fun toggleSelection() {
+        selected.value = !selected.value
+    }
+}
+
+var mm = remember { mutableStateOf(false) }
+var mm by remember { mutableStateOf(false) }
 
 
 Icon Reference::https://www.flaticon.com/search?word=add&corner=rounded&type=uicon

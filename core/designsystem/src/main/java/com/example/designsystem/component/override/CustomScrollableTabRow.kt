@@ -235,6 +235,7 @@ object TabRowDefaults {
             .width(currentTabWidth)
     }
 
+
     /**
      * Default opacity for the color of [Divider]
      */

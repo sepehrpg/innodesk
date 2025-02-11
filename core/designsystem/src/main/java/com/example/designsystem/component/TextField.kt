@@ -243,7 +243,7 @@ fun AppCustomSearchBarBasicTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(height)
-                    .shadow(elevation = 4.dp, shape)
+                    .shadow(elevation = 2.dp, shape)
                     .clip(shape)
                     .background(brush), contentAlignment = Alignment.CenterStart
             ) {

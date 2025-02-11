@@ -20,12 +20,15 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+
 /**
  * Configure base Kotlin with Android options
  */
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *>,
+    commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) {
     commonExtension.apply {
         compileSdk = 35
@@ -70,10 +73,13 @@ internal fun Project.configureKotlinJvm() {
  */
 private fun Project.configureKotlin() {
     // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
-    tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
+
+    tasks.withType<KotlinJvmCompile>().configureEach {
+        compilerOptions  {
             // Set JVM target to 11
-            jvmTarget = JavaVersion.VERSION_11.toString()
+            jvmTarget.set(JvmTarget.JVM_11)
+            freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
+            //jvmTarget = JavaVersion.VERSION_11.toString()
 
 
             //??????????
@@ -88,6 +94,27 @@ private fun Project.configureKotlin() {
 
         }
     }
+
+
+    //Deprecated
+    /*tasks.withType<KotlinJvmCompile>().configureEach {
+        kotlinOptions {
+            // Set JVM target to 11
+            jvmTarget = JavaVersion.VERSION_11.toString()
+
+
+            //??????????
+            // Treat all Kotlin warnings as errors (disabled by default)
+            // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
+            *//*val warningsAsErrors: String? by project
+            allWarningsAsErrors = warningsAsErrors.toBoolean()
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                // Enable experimental coroutines APIs, including Flow
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            )*//*
+
+        }
+    }*/
 }
 
 

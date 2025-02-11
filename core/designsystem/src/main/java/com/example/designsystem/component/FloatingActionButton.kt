@@ -66,6 +66,7 @@ fun AppExtendedFloatingActionButton(
     containerColor: Color = MaterialTheme.colorScheme.primary,
     contentColor: Color = MaterialTheme.colorScheme.onPrimary,
     shape: Shape = FloatingActionButtonDefaults.shape,
+    expanded: Boolean = true,
     elevation: FloatingActionButtonElevation = FloatingActionButtonDefaults.elevation(),
     icon: @Composable () -> Unit,
     text: @Composable () -> Unit,
@@ -73,6 +74,7 @@ fun AppExtendedFloatingActionButton(
     ExtendedFloatingActionButton(
         onClick = onClick,
         modifier = modifier,
+        expanded = expanded,
         containerColor = containerColor,
         contentColor = contentColor,
         shape = shape,

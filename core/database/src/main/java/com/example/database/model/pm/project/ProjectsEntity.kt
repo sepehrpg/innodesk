@@ -14,6 +14,7 @@ data class ProjectsEntity(
     @ColumnInfo(name = "user_id") val userId:Int? = null,
 
 
+    @ColumnInfo(name = "name") val name:String,
     @ColumnInfo(name = "description") val description:String,
 
     @ColumnInfo(name = "actual_start_date") val actualStartDate:String,

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.FloatingActionButtonElevation
@@ -25,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.designsystem.component.override.ExtendedFloatingActionButtonOverride
 import com.example.designsystem.config.direction.AppDirection
 import com.example.designsystem.config.direction.LayoutDirections
 import com.example.designsystem.theme.ThemePreviews
@@ -71,7 +71,7 @@ fun AppExtendedFloatingActionButton(
     icon: @Composable () -> Unit,
     text: @Composable () -> Unit,
 ) {
-    ExtendedFloatingActionButton(
+    ExtendedFloatingActionButtonOverride(
         onClick = onClick,
         modifier = modifier,
         expanded = expanded,

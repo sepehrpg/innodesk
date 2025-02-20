@@ -30,6 +30,8 @@ androidxUiAutomator = "2.3.0"
 androidxWindowManager = "1.2.0"
 androidxWork = "2.10.0"
 coil = "2.7.0"
+colorpicker = "1.0.0"
+composeMultiplatform = "2.6.2"
 dependencyGuard = "0.5.0"
 firebaseBom = "33.9.0"
 firebaseCrashlyticsPlugin = "3.0.3"
@@ -116,6 +118,8 @@ androidx-work-testing = { group = "androidx.work", name = "work-testing", versio
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
+colorpicker = { module = "io.mhssn:colorpicker", version.ref = "colorpicker" }
+compose-calender-multiplatform = { module = "com.kizitonwose.calendar:compose-multiplatform", version.ref = "composeMultiplatform" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-cloud-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }

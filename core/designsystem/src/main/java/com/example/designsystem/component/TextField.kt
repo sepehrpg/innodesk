@@ -1,13 +1,13 @@
 package com.example.designsystem.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation.Companion.keyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
@@ -31,8 +31,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.designsystem.config.direction.AppDirection
 import com.example.designsystem.config.direction.LayoutDirections
+import com.example.designsystem.theme.ClickUpGray1
+import com.example.designsystem.theme.ClickUpWhiteBackground
+import com.example.designsystem.theme.PrimaryColor
 
 
 @Composable
@@ -206,7 +211,6 @@ fun AppOutlineTextField(
         colors = colors
     )
 }
-
 
 
 
@@ -471,6 +475,17 @@ private fun AppTextFieldPreview2() {
                 )
             }
 
+
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 5.dp)){
+                AppOutlineTextFieldStatic1(
+                    value = "Enter text",
+                    onValueChange = { },
+                )
+            }
+
         }
     }
 
@@ -484,5 +499,35 @@ private fun AppTextFieldPreview2() {
 
 
 
+@Composable
+fun AppOutlineTextFieldStatic1(
+    value: String,
+    placeHolder:String = "",
+    onValueChange: (String) -> Unit,
+) {
+    val focusManager = LocalFocusManager.current
+
+    AppOutlineTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier
+            .fillMaxWidth().background(ClickUpWhiteBackground)
+            .height(52.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedBorderColor = ClickUpGray1,
+            focusedBorderColor = PrimaryColor.copy(alpha = 0.5f)
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = { focusManager.clearFocus(true) }
+        ),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Done,
+        ),
+        placeholder = {
+            AppText(placeHolder, color = Color.Gray, fontSize = 14.sp)
+        }
+    )
+}
 
 

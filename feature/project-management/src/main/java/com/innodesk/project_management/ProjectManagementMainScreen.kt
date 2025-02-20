@@ -1,5 +1,6 @@
 package com.innodesk.project_management
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -43,6 +44,7 @@ import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -78,7 +80,14 @@ fun ProjectManagementMainScreen() {
             gradientColors = gradientBackgroundColor,
             modifier = Modifier.fillMaxSize()
         ) {
-            Box(Modifier.fillMaxSize().then(if (isPreview) Modifier else Modifier.statusBarsPadding().navigationBarsPadding())) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .then(
+                        if (isPreview) Modifier else Modifier
+                            .statusBarsPadding()
+                            .navigationBarsPadding()
+                    )) {
                 Column(Modifier.fillMaxSize()) {
                     Column(Modifier.weight(1f)){
                         Header()
@@ -193,16 +202,18 @@ private fun Header() {
 private fun Body(
     changeBackgroundColor: (gradientBackgroundColor: GradientColors?) -> Unit
 ) {
+    val context = LocalContext.current
     var pageIndex by remember { mutableStateOf(0) }
 
     Box(Modifier.padding(top = 2.dp)) {
-        val mod: Modifier = Modifier.shadow(2.dp, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+        val mod: Modifier = Modifier
+            .shadow(2.dp, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .clip(
                 shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
             )
             .background(Color.White)
         AppTabPager(
-            tabs = tabItem(pageIndex),
+            tabs = tabItem(context,pageIndex),
             scrollableTab = true,
             pagerModifier = mod,
             tabContainerColor = Color.Transparent,
@@ -216,7 +227,7 @@ private fun Body(
             dividerColor = Color.Transparent,
             dividerThickness = 0.dp,
             pageIndexCallBack = {
-                changeBackgroundColor(tabItem(pageIndex)[it].gradientColorsList)
+                changeBackgroundColor(tabItem(context,pageIndex)[it].gradientColorsList)
                 pageIndex = it
             }
         )
@@ -225,18 +236,18 @@ private fun Body(
 
 
 
-private fun tabItem(pageIndex:Int): List<AppTabPagerItems> = buildList {
+private fun tabItem(context:Context,pageIndex:Int): List<AppTabPagerItems> = buildList {
     repeat(7) { index ->
         add(
             AppTabPagerItems(
                 title = when (index) {
-                    0 -> "Projects"
-                    1 -> "Settings"
-                    2 -> "Info"
-                    3 -> "Star"
-                    4 -> "Search"
-                    5 -> "EmojiEvents"
-                    else -> "Call"
+                    0 -> context.getString(R.string.dashboard)
+                    1 -> context.getString(R.string.recent)
+                    2 -> context.getString(R.string.projects)
+                    3 -> context.getString(R.string.tasks)
+                    4 -> context.getString(R.string.reminder)
+                    5 -> context.getString(R.string.docs)
+                    else -> ""
                 },
                 indicatorColor = when (index) {
                     0 -> GradientColor1.bottom
@@ -261,12 +272,12 @@ private fun tabItem(pageIndex:Int): List<AppTabPagerItems> = buildList {
                             else -> Icons.Filled.Call
                         },
                         contentDescription = when (index) {
-                            0 -> "Home"
-                            1 -> "Settings"
-                            2 -> "Info"
-                            3 -> "Star"
-                            4 -> "Search"
-                            5 -> "EmojiEvents"
+                            0 -> "dashboard"
+                            1 -> "recent"
+                            2 -> "projects"
+                            3 -> "tasks"
+                            4 -> "reminder"
+                            5 -> "docs"
                             6 -> "Call"
                             else -> "Call"
                         },
@@ -319,145 +330,6 @@ private fun tabItem(pageIndex:Int): List<AppTabPagerItems> = buildList {
             )
         )
     }
-
-
-    /*val tabItems:List<AppTabPagerItems> = listOf(
-        AppTabPagerItems(
-            title = "Projects",
-            indicatorColor = GradientColor1.bottom,
-            icon = {
-                Icon(
-                    imageVector = Icons.Filled.Work,
-                    contentDescription = "Home",
-                    modifier = Modifier.size(18.dp),
-                    tint = if (pageIndex == 0) GradientColor1.bottom else Color.Gray
-                )
-            },
-            gradientColorsList = GradientColor1,
-            contentScreens = {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.White
-                ) {
-                    ProjectsScreen()
-                }
-            }
-        ),
-        AppTabPagerItems(
-            title = "Settings",
-            indicatorColor = GradientColor2.bottom.adjustWarmth(50),
-            icon = {
-                Icon(
-                    imageVector = Icons.Filled.Settings,
-                    contentDescription = "Settings",
-                    modifier = Modifier.size(18.dp),
-                    if (pageIndex == 1) GradientColor2.bottom.adjustWarmth(50) else Color.Gray
-                )
-            },
-            gradientColorsList = GradientColor2,
-            contentScreens = {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.White
-                ) { Text("Settings Content", modifier = Modifier.padding(16.dp)) }
-            }
-        ),
-        AppTabPagerItems(
-            title = "Info",
-            indicatorColor = GradientColor3.bottom.adjustWarmth(50),
-            icon = {
-                Icon(
-                    imageVector = Icons.Filled.Info,
-                    contentDescription = "Info",
-                    modifier = Modifier.size(18.dp),
-                    tint = if (pageIndex == 2) GradientColor3.bottom.adjustWarmth(50) else Color.Gray
-                )
-            },
-            gradientColorsList = GradientColor3,
-            contentScreens = {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.White
-                ) { Text("Info Content", modifier = Modifier.padding(16.dp)) }
-            }
-        ),
-        AppTabPagerItems(
-            title = "Star",
-            indicatorColor = GradientColor4.bottom.adjustWarmth(50),
-            icon = {
-                Icon(
-                    imageVector = Icons.Filled.Star,
-                    contentDescription = "Star",
-                    modifier = Modifier.size(18.dp),
-                    tint = if (pageIndex == 3) GradientColor4.bottom.adjustWarmth(50) else Color.Gray
-                )
-            },
-            gradientColorsList = GradientColor4,
-            contentScreens = {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.White
-                ) { Text("Star Content", modifier = Modifier.padding(16.dp)) }
-            }
-        ),
-        AppTabPagerItems(
-            title = "Search",
-            indicatorColor = GradientColor5.bottom.adjustWarmth(50),
-            icon = {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Search",
-                    modifier = Modifier.size(18.dp),
-                    tint = if (pageIndex == 4) GradientColor5.bottom.adjustWarmth(50) else Color.Gray
-                )
-            },
-            gradientColorsList = GradientColor5,
-            contentScreens = {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.White
-                ) { Text("Search Content", modifier = Modifier.padding(16.dp)) }
-            }
-        ),
-        AppTabPagerItems(
-            title = "EmojiEvents",
-            indicatorColor = GradientColor6.bottom.adjustWarmth(50),
-            icon = {
-                Icon(
-                    imageVector = Icons.Filled.EmojiEvents,
-                    contentDescription = "EmojiEvents",
-                    modifier = Modifier.size(18.dp),
-                    tint = if (pageIndex == 5) GradientColor6.bottom.adjustWarmth(50) else Color.Gray
-                )
-            },
-            gradientColorsList = GradientColor6,
-            contentScreens = {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.White
-                ) { Text("EmojiEvents Content", modifier = Modifier.padding(16.dp)) }
-            }
-        ),
-        AppTabPagerItems(
-            title = "Call",
-            indicatorColor = GradientColor7.bottom.adjustWarmth(50),
-            icon = {
-                Icon(
-                    imageVector = Icons.Filled.Call,
-                    contentDescription = "Call",
-                    modifier = Modifier.size(18.dp),
-                    tint = if (pageIndex == 6) GradientColor7.bottom.adjustWarmth(50) else Color.Gray
-                )
-            },
-            gradientColorsList = GradientColor7,
-            contentScreens = {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.White
-                ) { Text("Call Content", modifier = Modifier.padding(16.dp)) }
-            }
-        )
-    )*/
 }
 
 

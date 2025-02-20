@@ -65,14 +65,14 @@ import com.example.designsystem.theme.ThemePreviews
 import com.example.designsystem.theme.ThemePreviewsWithBackground
 import com.example.designsystem.theme.ThemePreviewsWithShowBackgroundAndShowSystemUi
 import com.example.designsystem.theme.ThemePreviewsWithShowSystemUi
+import com.innodesk.project_management.projects.component.BottomSheetsProject
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProjectsScreen(){
-    var isVisible by remember { mutableStateOf(false) }
-
+    var isVisible = remember { mutableStateOf(false) }
 
     Box(Modifier.fillMaxSize().padding(top = 10.dp), contentAlignment = Alignment.BottomCenter){
         LazyColumn(Modifier.fillMaxSize()){
@@ -84,26 +84,14 @@ fun ProjectsScreen(){
 
         Box(Modifier.fillMaxWidth().padding(bottom = 10.dp,end = 10.dp, start = 10.dp), contentAlignment = Alignment.BottomEnd){
             AppExtendedFloatingActionButton(
-                onClick = {isVisible=true},
+                onClick = {isVisible.value=true},
                 containerColor = PrimaryColor,
                 icon = { Icon(AppIcons.PostAdd, contentDescription = "") },
-                text = { AppText("New Project", color = Color.White) }
+                text = { AppText("New Project", fontSize = 14.sp, color = Color.White) }
             )
         }
     }
-
-
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded=true)
-
-    AppModalBottomSheet(
-        isVisible = isVisible,
-        onDismissRequest = { isVisible = false },
-        containerColor = Color.White,
-        sheetState = sheetState ,
-        content = {
-            AddProjectBottomSheetContent(onCloseBottomSheet = { isVisible=false })
-        }
-    )
+    BottomSheetsProject(isVisible, onCancelClick = {}, onDoneClick = {})
 }
 
 
@@ -114,17 +102,17 @@ private fun ProjectItem(){
         Box(Modifier.fillMaxWidth().padding(vertical = 20.dp,horizontal = 15.dp), contentAlignment = Alignment.Center){
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
                 Box(){
-                    Icon(AppIcons.Folder, contentDescription = "Folder", tint = Color.Gray)
+                    Icon(AppIcons.Folder, contentDescription = "Folder", tint = Color.Gray, modifier = Modifier.size(22.dp))
                 }
                 Spacer(Modifier.width(5.dp))
                 Box(Modifier.weight(1f)){
-                    AppText("Project One", color = Color.Black)
+                    AppText("Project One", color = Color.Black, fontSize = 14.sp)
                 }
                 Spacer(Modifier.width(5.dp))
-                AppText("1")
+                AppText("1", fontSize = 14.sp)
                 Spacer(Modifier.width(5.dp))
                 Box(){
-                    Icon(AppIcons.MoreHoriz, contentDescription = "MoreHoriz", tint = Color.Gray)
+                    Icon(AppIcons.MoreHoriz, contentDescription = "MoreHoriz", tint = Color.Gray, modifier = Modifier.size(22.dp))
                 }
             }
         }
@@ -133,121 +121,12 @@ private fun ProjectItem(){
 }
 
 
-@Composable
-private fun ProjectTemplateItem(checked:Boolean){
-    Column(Modifier.fillMaxWidth()){
-        Box(Modifier.fillMaxWidth().padding(vertical = 10.dp,horizontal = 4.dp), contentAlignment = Alignment.Center){
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
-                /*Box(){
-                    if (checked){
-                        Icon(AppIcons.Done, contentDescription = "Folder", tint = PrimaryColor)
-                    }
-                    else{
-                        Icon(AppIcons.Folder, contentDescription = "Folder", tint = Color.Transparent)
-                    }
-                }*/
-                Spacer(Modifier.width(5.dp))
-                Box(Modifier.weight(1f)){
-                    AppText("Kanban", color = Color.Gray)
-                }
-                Spacer(Modifier.width(5.dp))
-                Box(){
-                    Icon(AppIcons.MoreHoriz, contentDescription = "MoreHoriz", tint = Color.Gray)
-                }
-            }
-        }
-        HorizontalDivider(thickness = 0.1.dp, color = Color(0xFFEEEEEE))
-    }
-}
 
 
 
 
-@Composable
-private fun AddProjectBottomSheetContent(onCloseBottomSheet:()->Unit){
-    var projectName by remember { mutableStateOf("") }
-    LazyColumn (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp)
-    ) {
-        item {
-            val textStyle = TextStyle(color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-            Box(Modifier.padding(horizontal = 5.dp)){
-                AppBasicTextField(
-                    value = projectName,
-                    onValueChange = {projectName=it},
-                    textStyle = textStyle,
-                    placeholder = { AppText("Project Name", style = textStyle.copy(color = Color.Gray)) },
-                )
-            }
-        }
-
-        item{
-            Column(Modifier.padding(top = 20.dp)){
-                Box(Modifier.padding(horizontal = 5.dp)){
-                    AppText("Access", fontSize = 18.sp, color = Color.DarkGray)
-                }
-                val list = listOf(
-                    AppCustomLeadingIconTabItem(id = 1,text = {Text("Company", fontSize = 11.sp, fontWeight = FontWeight.Bold)},
-                        icon = { Icon(modifier = Modifier.size(20.dp), imageVector = Icons.Default.Groups, contentDescription = "Home Icon") },
-                    ),
-                    AppCustomLeadingIconTabItem(id = 2,text ={Text("Private", fontSize = 10.sp, fontWeight = FontWeight.Bold)},
-                        icon = { Icon(modifier = Modifier.size(20.dp),imageVector = Icons.Default.Group, contentDescription = "Home Icon") } ),
-                    AppCustomLeadingIconTabItem(id = 3,text ={Text("Personal", fontSize = 10.sp, fontWeight = FontWeight.Bold)},
-                        icon = { Icon(modifier = Modifier.size(20.dp),imageVector = Icons.Default.Person, contentDescription = "Home Icon") } ,),
-                )
-                Box(Modifier.fillMaxWidth()){
-                    AppCustomLeadingIconTab(
-                        item = list,
-                        selectedContentColor = PrimaryColor,
-                        unselectedContentColor = Color.Gray,
-                        onClick = {
-                            list.map { it.nonSelected() }
-                            list[it].isSelected()
-                        }
-                    )
-                }
-            }
-        }
 
 
-        item{
-            Column(Modifier.padding(top = 40.dp)){
-                Box(Modifier.padding(horizontal = 5.dp)){
-                    AppText("Template", fontSize = 18.sp, color = Color.DarkGray)
-                }
-
-                repeat(3){
-                    ProjectTemplateItem(if(it==1) true else false)
-                }
-
-            }
-        }
-
-        item{ Spacer(Modifier.height(20.dp)) }
-
-        item {
-            Box(Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 10.dp)){
-                AppButton(
-                    onClick = {},
-                    content = { Text("Create") },
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation =  ButtonDefaults.buttonElevation(defaultElevation=10.dp),
-                    buttonColors = ButtonDefaults.buttonColors(containerColor = PrimaryColor),
-                    contentPadding = PaddingValues(15.dp),
-                    enabled = true,
-                    border = null,
-                    shape = RoundedCornerShape(10.dp),
-                )
-            }
-        }
-
-
-        item{ Spacer(Modifier.height(10.dp)) }
-
-    }
-}
 
 
 

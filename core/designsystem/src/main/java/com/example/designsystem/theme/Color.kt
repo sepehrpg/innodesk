@@ -23,6 +23,10 @@ import androidx.compose.ui.graphics.Color
  */
 
 val PrimaryColor = Color(0xFF673AB7)
+val ClickUpWhiteBackground = Color(0xFFFCFCFC)
+val ClickUpGray1 = Color(0xffF2F3F6)
+val ClickUpGray2 = Color(0xFFF6F7F9)
+val ClickUpGray3 = Color(0xFFEDEEF2)
 
 
 internal val Blue10 = Color(0xFF001F28)

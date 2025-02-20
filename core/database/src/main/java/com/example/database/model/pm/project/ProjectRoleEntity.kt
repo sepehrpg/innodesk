@@ -8,6 +8,5 @@ import androidx.room.PrimaryKey
 data class ProjectRoleEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id:Int,
-
     @ColumnInfo(name = "name") val name:String,
 )

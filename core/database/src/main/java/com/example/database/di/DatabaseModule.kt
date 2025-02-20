@@ -1,28 +1,20 @@
-/*
- * Copyright 2022 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.database.di
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.database.RoomDb
+import com.example.database.model.pm.templates.TemplatesEntity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.jetbrains.annotations.Async.Execute
+import java.util.concurrent.Executors
 import javax.inject.Singleton
 
 @Module
@@ -30,11 +22,26 @@ import javax.inject.Singleton
 internal object DatabaseModule {
     @Provides
     @Singleton
-    fun providesNiaDatabase(
+    fun providesDatabase(
         @ApplicationContext context: Context,
     ): RoomDb = Room.databaseBuilder(
         context,
         RoomDb::class.java,
-        "app_room_db",
-    ).build()
+        "app_db",
+    ).addCallback(object : RoomDatabase.Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            Executors.newSingleThreadExecutor().execute {
+                val dao = providesDatabase(context).templatesDao()
+                CoroutineScope(Dispatchers.IO).launch {
+                    dao.insertAllArticles(
+                        listOf(
+                            TemplatesEntity( name = "Kanban"),
+                            TemplatesEntity( name = "Scrum"),
+                        )
+                    )
+                }
+            }
+        }
+    }).fallbackToDestructiveMigration().build()
 }

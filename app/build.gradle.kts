@@ -48,7 +48,7 @@ dependencies {
 
     /** Add Module */
     implementation(project(":core:designsystem"))
-
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.9")
     implementation(libs.material) //ex:androidx.activity.ComponentActivity
     //implementation(libs.androidx.core.ktx)
     //implementation(libs.androidx.appcompat)

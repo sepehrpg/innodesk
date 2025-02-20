@@ -20,20 +20,22 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.database.dao.TemplateDao
+import com.example.database.model.pm.templates.TemplatesEntity
 import com.example.database.utils.InstantConverter
 
 
 @Database(
     entities = [
-        //ArticlesEntity::class,
+        TemplatesEntity::class,
     ],
-    version = 1,
+    version = 2,
 )
 @TypeConverters(
     InstantConverter::class,
 )
 abstract class RoomDb : RoomDatabase() {
-    //abstract fun articlesDao(): ArticlesDao
+    abstract fun templatesDao(): TemplateDao
 }
 
 

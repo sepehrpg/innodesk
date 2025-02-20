@@ -1,7 +1,10 @@
 package com.example.common.extension
 
+import android.annotation.SuppressLint
 import android.graphics.BlurMaskFilter
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +26,17 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+
+
+
+@SuppressLint("UnrememberedMutableInteractionSource")
+fun Modifier.clickableWithNoRipple(onClick: () -> Unit): Modifier = composed {
+    this.clickable(
+        indication = null, // No ripple effect
+        interactionSource = MutableInteractionSource(), // Required for handling interactions
+        onClick = onClick
+    )
+}
 
 
 @Stable

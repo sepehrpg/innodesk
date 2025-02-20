@@ -31,8 +31,12 @@ import androidx.compose.material.icons.rounded.Bookmarks
 import androidx.compose.material.icons.rounded.Call
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Colorize
 import androidx.compose.material.icons.rounded.Folder
+import androidx.compose.material.icons.rounded.FormatListNumbered
 import androidx.compose.material.icons.rounded.Grid3x3
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.PostAdd
 import androidx.compose.material.icons.rounded.Search
@@ -49,6 +53,7 @@ object AppIcons {
     val Add = Icons.Rounded.Add
     val Call = Icons.Rounded.Call
     val ArrowBack = Icons.Rounded.ArrowBack
+    val ArrowRight = Icons.Rounded.KeyboardArrowRight
     val Bookmark = Icons.Rounded.Bookmark
     val BookmarkBorder = Icons.Rounded.BookmarkBorder
     val Bookmarks = Icons.Rounded.Bookmarks
@@ -70,6 +75,8 @@ object AppIcons {
     val Folder = Icons.Outlined.Folder
     val MoreHoriz = Icons.Outlined.MoreHoriz
     val Done = Icons.Outlined.Done
+    val Status = Icons.Rounded.List
+    val Colorize = Icons.Rounded.Colorize
 
 
 }

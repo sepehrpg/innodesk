@@ -13,3 +13,4 @@ plugins {
     //alias(libs.plugins.kotlin.compose) apply false //old
     alias(libs.plugins.compose.compiler) apply false
 }
+

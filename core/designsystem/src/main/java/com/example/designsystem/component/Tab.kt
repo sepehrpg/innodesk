@@ -1,6 +1,7 @@
 package com.example.designsystem.component
 
 import android.util.Log
+import android.widget.Space
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -66,6 +68,9 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.designsystem.icon.AppIcons
+import com.example.designsystem.theme.ClickUpGray2
+import com.example.designsystem.theme.ClickUpGray3
 import com.example.designsystem.theme.GradientColor1
 import kotlinx.coroutines.launch
 /**
@@ -437,9 +442,11 @@ data class AppCustomLeadingIconTabItem(
     val id:Int,
     val text: @Composable () -> Unit,
     val icon: @Composable () -> Unit,
+    val description: String? = null,
     var selected: MutableState<Boolean> = mutableStateOf(false),
     val modifier: Modifier? = null,
     val enabled: Boolean? = null,
+    val additionalUi: Boolean = false,
     val selectedContentColor: Color? = null,
     val unselectedContentColor: Color? = null,
     val interactionSource: MutableInteractionSource? = null
@@ -464,33 +471,59 @@ fun AppCustomLeadingIconTab(
     onClick: (index:Int) -> Unit,
     modifier: Modifier = Modifier,
     boxModifier: Modifier = Modifier.fillMaxWidth()
-        .shadow(2.dp, RoundedCornerShape(12.dp)).background(Color(0xFFF8F8F8)).clip(RoundedCornerShape(12.dp)),
+        .shadow(0.dp, RoundedCornerShape(0.dp)).clip(RoundedCornerShape(10.dp)).background(ClickUpGray2),
     rowModifier: Modifier = Modifier.fillMaxWidth(),
-    selectedModifier:Modifier = Modifier.fillMaxWidth().shadow(2.dp, RoundedCornerShape(12.dp))
+    selectedModifier:Modifier = Modifier.fillMaxWidth().shadow(0.dp, RoundedCornerShape(0.dp)).clip(RoundedCornerShape(10.dp))
         .background(Color.White).clip(RoundedCornerShape(12.dp)),
     enabled: Boolean = true,
     selectedContentColor: Color = LocalContentColor.current,
     unselectedContentColor: Color = selectedContentColor,
     interactionSource: MutableInteractionSource? = null
 ) {
+    var selected :Int? by remember { mutableStateOf(null) }
+
     Box(boxModifier){
-        Row(rowModifier){
-            repeat(item.size){ index->
-                LeadingIconTab(
-                    selected = item[index].selected.value,
-                    onClick = {
-                        onClick(index)
-                    },
-                    text = item[index].text,
-                    icon = item[index].icon,
-                    modifier = Modifier.weight(1f).padding(horizontal = 5.dp, vertical = 5.dp)
-                        .then(if (item[index].selected.value) selectedModifier else item[index].modifier?:modifier ),
-                    enabled = item[index].enabled?:enabled,
-                    selectedContentColor = item[index].selectedContentColor?:selectedContentColor,
-                    unselectedContentColor = item[index].unselectedContentColor?:unselectedContentColor,
-                    interactionSource = item[index].interactionSource?:interactionSource
-                )
+        Column(Modifier.fillMaxWidth()){
+            Row(rowModifier.height(52.dp)){
+                repeat(item.size){ index->
+                    if (item[index].selected.value) selected = index
+                    LeadingIconTab(
+                        selected = item[index].selected.value,
+                        onClick = {
+                            onClick(index)
+                            selected = index
+                        },
+                        text = item[index].text,
+                        icon = item[index].icon,
+                        modifier = Modifier.weight(1f).padding(horizontal = 5.dp, vertical = 5.dp)
+                            .then(if (item[index].selected.value) selectedModifier else item[index].modifier?:modifier ),
+                        enabled = item[index].enabled?:enabled,
+                        selectedContentColor = item[index].selectedContentColor?:selectedContentColor,
+                        unselectedContentColor = item[index].unselectedContentColor?:unselectedContentColor,
+                        interactionSource = item[index].interactionSource?:interactionSource
+                    )
+                }
             }
+
+            if (selected!=null){
+                if (item[selected!!].selected.value && !item[selected!!].description.isNullOrEmpty()){
+                    HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+
+                    if(item[selected!!].additionalUi){
+                        Spacer(Modifier.height(10.dp))
+                        Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 5.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+                            AppText("Share With", color = Color.DarkGray, fontSize = 13.sp)
+                            Icon(AppIcons.ArrowRight, contentDescription = "", tint = Color.Gray)
+                        }
+                        Spacer(Modifier.height(2.dp))
+                    }
+
+                    Box(Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 5.dp).background(ClickUpGray3, shape = RoundedCornerShape(10.dp))){
+                        AppText(item[selected!!].description.toString(), fontSize = 13.sp, modifier = Modifier.padding(10.dp))
+                    }
+                }
+            }
+
         }
     }
 }

@@ -56,6 +56,7 @@ import com.example.designsystem.component.AppCustomLeadingIconTab
 import com.example.designsystem.component.AppCustomLeadingIconTabItem
 import com.example.designsystem.component.AppExtendedFloatingActionButton
 import com.example.designsystem.component.AppFilledTonalIconButton
+import com.example.designsystem.component.AppIcon
 import com.example.designsystem.component.AppModalBottomSheet
 import com.example.designsystem.component.AppText
 import com.example.designsystem.icon.AppIcons
@@ -76,7 +77,7 @@ fun ProjectsScreen(){
 
     Box(Modifier.fillMaxSize().padding(top = 10.dp), contentAlignment = Alignment.BottomCenter){
         LazyColumn(Modifier.fillMaxSize()){
-            items(4){
+            items(1){
                 ProjectItem()
             }
             item { Spacer(Modifier.height(70.dp)) }
@@ -86,12 +87,12 @@ fun ProjectsScreen(){
             AppExtendedFloatingActionButton(
                 onClick = {isVisible.value=true},
                 containerColor = PrimaryColor,
-                icon = { Icon(AppIcons.PostAdd, contentDescription = "") },
-                text = { AppText("New Project", fontSize = 14.sp, color = Color.White) }
+                icon = { AppIcon(AppIcons.PostAdd, contentDescription = "") },
+                text = { AppText("New Project", fontSize = 14.sp, color = Color.White, modifier = Modifier.padding(top = 3.dp)) }
             )
         }
     }
-    BottomSheetsProject(isVisible, onCancelClick = {}, onDoneClick = {})
+    BottomSheetsProject(isVisible, onCancelClick = { isVisible.value = false }, onDoneClick = {})
 }
 
 
@@ -102,7 +103,7 @@ private fun ProjectItem(){
         Box(Modifier.fillMaxWidth().padding(vertical = 20.dp,horizontal = 15.dp), contentAlignment = Alignment.Center){
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
                 Box(){
-                    Icon(AppIcons.Folder, contentDescription = "Folder", tint = Color.Gray, modifier = Modifier.size(22.dp))
+                    AppIcon(AppIcons.Folder, contentDescription = "Folder", tint = Color.Gray, modifier = Modifier.size(22.dp))
                 }
                 Spacer(Modifier.width(5.dp))
                 Box(Modifier.weight(1f)){
@@ -112,7 +113,7 @@ private fun ProjectItem(){
                 AppText("1", fontSize = 14.sp)
                 Spacer(Modifier.width(5.dp))
                 Box(){
-                    Icon(AppIcons.MoreHoriz, contentDescription = "MoreHoriz", tint = Color.Gray, modifier = Modifier.size(22.dp))
+                    AppIcon(AppIcons.MoreHoriz, contentDescription = "MoreHoriz", tint = Color.Gray, modifier = Modifier.size(22.dp))
                 }
             }
         }

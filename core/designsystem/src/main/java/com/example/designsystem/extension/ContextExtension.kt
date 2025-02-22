@@ -1,4 +1,4 @@
-package com.example.common.extension
+package com.example.designsystem.extension
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper

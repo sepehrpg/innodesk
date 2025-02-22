@@ -1,4 +1,4 @@
-package com.example.common.extension
+package com.example.designsystem.extension
 
 
 

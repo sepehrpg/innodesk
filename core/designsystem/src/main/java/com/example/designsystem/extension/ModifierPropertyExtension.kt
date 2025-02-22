@@ -1,4 +1,4 @@
-package com.example.common.extension
+package com.example.designsystem.extension
 
 import android.annotation.SuppressLint
 import android.graphics.BlurMaskFilter

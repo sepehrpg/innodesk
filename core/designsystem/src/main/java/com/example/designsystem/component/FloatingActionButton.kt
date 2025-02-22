@@ -96,11 +96,11 @@ private fun AppFloatingActionButtonPreview(){
                 Row(Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceBetween){
                     AppFloatingActionButton(
                         onClick = { /* Do something */ },
-                        content = { Icon(Icons.Default.Add, contentDescription = null) }
+                        content = { AppIcon(Icons.Default.Add, contentDescription = null) }
                     )
                     AppExtendedFloatingActionButton(
                         onClick = { /* Do something */ },
-                        icon = { Icon(Icons.Default.Check, contentDescription = null) },
+                        icon = { AppIcon(Icons.Default.Check, contentDescription = null) },
                         text = { Text("Extended FAB") }
                     )
                 }

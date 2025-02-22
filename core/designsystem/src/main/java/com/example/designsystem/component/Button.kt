@@ -382,7 +382,7 @@ private fun AppButtonPreview(){
             Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppButton(
                     onClick = {},
-                    content = { Text("HELLO WORK") },
+                    content = { Text("AppButton") },
                     modifier = Modifier.fillMaxWidth(),
                     elevation =  ButtonDefaults.buttonElevation(defaultElevation=10.dp),
                     buttonColors = ButtonDefaults.buttonColors(containerColor = Color.Red),
@@ -395,9 +395,9 @@ private fun AppButtonPreview(){
 
             Box(Modifier.fillMaxWidth().padding(horizontal = 60.dp, vertical = 10.dp)){
                 AppButtonWithIcon(
-                    leadingIcon = {Icon(Icons.Rounded.Call,contentDescription = "")},
+                    leadingIcon = {AppIcon(Icons.Rounded.Call,contentDescription = "")},
                     onClick = {},
-                    content = { Text("HELLO WORK") },
+                    content = { Text("AppButtonWithIcon") },
                     enabled = true,
                     contentPadding = PaddingValues(horizontal = 20.dp),
                     buttonColors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
@@ -430,7 +430,7 @@ private fun AppButtonPreview(){
             Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppOutlinedButtonWithIcon(
                     onClick = {},
-                    content = { Text(text = "HELLO WORK") },
+                    content = { Text(text = "AppOutlinedButtonWithIcon") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = Color.White,
@@ -444,14 +444,14 @@ private fun AppButtonPreview(){
                     customSpace = false,
                     elevation = ButtonDefaults.buttonElevation(defaultElevation= 4.dp ),
                     shape = RectangleShape,
-                    leadingIcon = { Icon(Icons.Rounded.Call,contentDescription = "") },
+                    leadingIcon = { AppIcon(Icons.Rounded.Call,contentDescription = "") },
                 )
             }
 
             Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppTextButton(
                     onClick = {},
-                    content = { Text(text = "HELLO WORK") },
+                    content = { Text(text = "AppTextButton") },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -459,16 +459,16 @@ private fun AppButtonPreview(){
             Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppTextButtonWithIcon(
                     onClick = {},
-                    content = { Text(text = "HELLO WORK") },
+                    content = { Text(text = "AppTextButtonWithIcon") },
                     modifier = Modifier.fillMaxWidth(),
-                    leadingIcon = { Icon(Icons.Rounded.Call,contentDescription = "") },
+                    leadingIcon = { AppIcon(Icons.Rounded.Call,contentDescription = "") },
                 )
             }
 
             Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppElevatedButton(
                     onClick = {},
-                    content = { Text(text = "HELLO WORK") },
+                    content = { Text(text = "AppElevatedButton") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = Color.White,
@@ -483,8 +483,8 @@ private fun AppButtonPreview(){
             Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppElevatedButtonWithIcon(
                     onClick = {},
-                    leadingIcon = { Icon(Icons.Default.Favorite, contentDescription = null) },
-                    content = { Text("Button With Icon") }
+                    leadingIcon = { AppIcon(Icons.Default.Favorite, contentDescription = null) },
+                    content = { Text("AppElevatedButtonWithIcon") }
                 )
             }
 

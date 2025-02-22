@@ -1,7 +1,6 @@
 package com.innodesk.project_management.projects.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,13 +17,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Groups
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -35,12 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.common.extension.clickableWithNoRipple
-import com.example.designsystem.component.AppBasicTextField
+import com.example.designsystem.extension.clickableWithNoRipple
 import com.example.designsystem.component.AppCustomLeadingIconTab
 import com.example.designsystem.component.AppCustomLeadingIconTabItem
 import com.example.designsystem.component.AppModalBottomSheet
@@ -48,6 +47,7 @@ import com.example.designsystem.component.AppText
 import com.example.designsystem.component.AppBottomSheetDragHandle
 import com.example.designsystem.component.AppColorPickerLibrary1
 import com.example.designsystem.component.AppFilledIconButton
+import com.example.designsystem.component.AppIcon
 import com.example.designsystem.component.AppOutlineTextFieldStatic1
 import com.example.designsystem.icon.AppIcons
 import com.example.designsystem.theme.ClickUpGray2
@@ -57,10 +57,10 @@ import com.example.designsystem.theme.PrimaryColor
 @Composable
 fun BottomSheetsProject(
     isVisible: MutableState<Boolean> = mutableStateOf(false),
+    sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onCancelClick: () -> Unit,
     onDoneClick: () -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     AppModalBottomSheet(
         isVisible = isVisible.value,
         onDismissRequest = { isVisible.value = false },
@@ -69,7 +69,7 @@ fun BottomSheetsProject(
         dragHandle = {
             AppBottomSheetDragHandle(
                 onDoneClick = {},
-                onCancelClick = {},
+                onCancelClick = onCancelClick,
                 title = "Create Project",
                 done = "Create",
                 cancel = "Cancel"
@@ -82,16 +82,26 @@ fun BottomSheetsProject(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetContent() {
+private fun BottomSheetContent() {
     var projectName: String by remember { mutableStateOf("") }
     val tempSelected = remember { mutableStateOf(true) }
     var showDialog by remember { mutableStateOf(false) }
-    var colorValue:Color? by remember { mutableStateOf(null) }
+    var colorValue: Color? by remember { mutableStateOf(null) }
 
-    AppColorPickerLibrary1(showDialog, onDismissRequest = {showDialog=false}, colorValue = {
+    AppColorPickerLibrary1(showDialog, onDismissRequest = { showDialog = false }, colorValue = {
         colorValue = it
     })
+
+    var openBottomSheet = remember { mutableStateOf(false) }
+    if (openBottomSheet.value) {
+        BottomSheetTemplate(isVisible = openBottomSheet, onCancelClick = {
+            openBottomSheet.value = false
+        }, onDoneClick = {
+
+        })
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -100,12 +110,15 @@ fun BottomSheetContent() {
     ) {
 
         item {
-            Column(Modifier.padding(top = 0.dp)) {
+            Column(Modifier.padding(top = 10.dp)) {
                 Box(Modifier.padding(horizontal = 5.dp)) {
                     AppText("Project Name", fontSize = 14.sp, color = Color.DarkGray)
                 }
 
-                Box(Modifier.fillMaxWidth().padding(horizontal = 5.dp)){
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 5.dp)) {
                     AppOutlineTextFieldStatic1(
                         value = projectName,
                         placeHolder = "Enter project name",
@@ -124,37 +137,24 @@ fun BottomSheetContent() {
                     AppText("Access", fontSize = 14.sp, color = Color.DarkGray)
                 }
                 val list = listOf(
-                    /*AppCustomLeadingIconTabItem(
-                        id = 1,
-                        description = "A private, single-user project visible only to you.",
-                        text = { Text("Personal", fontSize = 11.sp, fontWeight = FontWeight.Bold) },
-                        selected = tempSelected,
-                        icon = {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                imageVector = Icons.Default.Person,
-                                contentDescription = "Home Icon"
-                            )
-                        },
-                    ),*/
-                    AppCustomLeadingIconTabItem(id = 2,
+                    AppCustomLeadingIconTabItem(id = 1,
                         description = "Collaborate by inviting specific people via link or direct invitations. Only invited users can view and access the project.",
                         additionalUi = true,
                         selected = tempSelected,
                         text = { Text("Private", fontSize = 12.sp, fontWeight = FontWeight.Bold) },
                         icon = {
-                            Icon(
+                            AppIcon(
                                 modifier = Modifier.size(20.dp),
                                 imageVector = Icons.Default.Group,
                                 contentDescription = "Home Icon"
                             )
                         }),
                     AppCustomLeadingIconTabItem(
-                        id = 3,
+                        id = 2,
                         description = "A shared project visible to all team members within your company.",
                         text = { Text("Company", fontSize = 12.sp, fontWeight = FontWeight.Bold) },
                         icon = {
-                            Icon(
+                            AppIcon(
                                 modifier = Modifier.size(20.dp),
                                 imageVector = Icons.Default.Groups,
                                 contentDescription = "Home Icon"
@@ -162,7 +162,10 @@ fun BottomSheetContent() {
                         },
                     ),
                 )
-                Box(Modifier.fillMaxWidth().padding(horizontal = 5.dp)) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 5.dp)) {
                     AppCustomLeadingIconTab(
                         item = list,
                         selectedContentColor = PrimaryColor,
@@ -182,44 +185,82 @@ fun BottomSheetContent() {
                 Box(Modifier.padding(horizontal = 5.dp)) {
                     AppText("Project Setting", fontSize = 14.sp, color = Color.DarkGray)
                 }
-                Column(Modifier.fillMaxWidth().padding(horizontal = 5.dp).clip(RoundedCornerShape(10.dp)).background(ClickUpGray2).padding(horizontal = 5.dp)){
-                    Row(Modifier.fillMaxWidth().padding(5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
-                        Row(verticalAlignment = Alignment.CenterVertically){
-                            AppFilledIconButton(onClick = {},
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 5.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(ClickUpGray2)
+                        .padding(horizontal = 5.dp)
+                ) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth().clickableWithNoRipple {
+                                openBottomSheet.value = true
+                            }
+                            .padding(5.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            AppFilledIconButton(
+                                onClick = {
+
+                                },
                                 modifier = Modifier.width(40.dp),
                                 shape = RoundedCornerShape(10.dp),
                                 colors = IconButtonDefaults.filledIconButtonColors(
                                     containerColor = Color.White
-                                )) {
-                                Icon(AppIcons.Status, contentDescription = "", tint = Color.Gray)
+                                )
+                            ) {
+                                AppIcon(AppIcons.Status, contentDescription = "", tint = Color.Gray)
                             }
                             Spacer(Modifier.width(10.dp))
                             AppText("Templates", fontSize = 13.sp)
                         }
-                        Icon(AppIcons.ArrowRight, contentDescription = "", tint = Color.Gray)
+                        AppIcon(AppIcons.ArrowRight, contentDescription = "", tint = Color.Gray)
                     }
                     HorizontalDivider(color = Color((0xFFEEEEEE)))
-                    Row(Modifier.fillMaxWidth().clickableWithNoRipple {
-                        showDialog = true
-                    }.padding(5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
-                        Row(verticalAlignment = Alignment.CenterVertically){
-                            AppFilledIconButton(onClick = {},
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .clickableWithNoRipple {
+                                showDialog = true
+                            }
+                            .padding(5.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            AppFilledIconButton(
+                                onClick = {},
                                 modifier = Modifier.width(40.dp),
                                 shape = RoundedCornerShape(10.dp),
                                 colors = IconButtonDefaults.filledIconButtonColors(
                                     containerColor = Color.White
-                                )) {
-                                Icon(AppIcons.Colorize, contentDescription = "", tint = Color.Gray)
+                                )
+                            ) {
+                                AppIcon(
+                                    AppIcons.Colorize,
+                                    contentDescription = "",
+                                    tint = Color.Gray
+                                )
                             }
                             Spacer(Modifier.width(10.dp))
                             AppText("Color", fontSize = 13.sp)
                         }
 
-                        if (colorValue!=null){
-                            Box(Modifier.size(25.dp).background(color = colorValue!!, shape = RoundedCornerShape(5.dp)))
-                        }
-                        else{
-                            Icon(AppIcons.Add, contentDescription = "", tint = Color.Gray)
+                        if (colorValue != null) {
+                            Box(
+                                Modifier
+                                    .size(25.dp)
+                                    .background(
+                                        color = colorValue!!,
+                                        shape = RoundedCornerShape(5.dp)
+                                    )
+                            )
+                        } else {
+                            AppIcon(AppIcons.Add, contentDescription = "", tint = Color.Gray)
                         }
                     }
                 }
@@ -261,10 +302,30 @@ private fun ProjectTemplateItem(checked: Boolean) {
                 }
                 Spacer(Modifier.width(5.dp))
                 Box() {
-                    Icon(AppIcons.MoreHoriz, contentDescription = "MoreHoriz", tint = Color.Gray)
+                    AppIcon(AppIcons.MoreHoriz, contentDescription = "MoreHoriz", tint = Color.Gray)
                 }
             }
         }
         HorizontalDivider(thickness = 0.1.dp, color = Color(0xFFEEEEEE))
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun BottomSheetsProjectPreview() {
+    var open = remember { mutableStateOf(true) }
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Button(onClick = {
+            open.value = true
+        }) {
+            Text("OpenBottomSheet")
+        }
+        BottomSheetsProject(
+            isVisible = open,
+            sheetState = rememberStandardBottomSheetState(),
+            onCancelClick = {},
+            onDoneClick = {})
     }
 }

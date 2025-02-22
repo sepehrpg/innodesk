@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.designsystem.extension.clickableWithNoRipple
 import com.example.designsystem.theme.PrimaryColor
 
 @Composable
@@ -24,32 +26,41 @@ fun AppBottomSheetDragHandle(
     onDoneClick: () -> Unit,
     title: String,
     cancel: String = "Cancel",
-    done: String = "Done"
+    done: String = "Done",
+    content: @Composable (() -> Unit)? = null
 ) {
     Column(
         Modifier
-            .fillMaxWidth().padding(vertical = 20.dp)
+            .fillMaxWidth().padding(top = 20.dp, bottom = 0.dp)
             .background(Color.White)) {
         Row(
             Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)) {
-            AppText(cancel, color = Color.Gray, modifier = Modifier.clickable {
+            AppText(cancel, color = Color.Gray, fontSize = 14.sp, modifier = Modifier.clickableWithNoRipple {
                 onCancelClick()
             })
             Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
                 AppText(
                     title,
                     color = Color.DarkGray,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
                 )
             }
-            AppText(done, color = PrimaryColor, fontWeight = FontWeight.Bold, modifier = Modifier.clickable {
+            AppText(done, color = PrimaryColor, fontSize = 14.sp, fontWeight = FontWeight.Bold, modifier = Modifier.clickableWithNoRipple {
                 onDoneClick()
             })
         }
-        Spacer(Modifier.height(10.dp))
-        HorizontalDivider(color = Color(0xFFEEEEEE))
-        Spacer(Modifier.height(10.dp))
+
+        if(content!=null){
+            content()
+        }
+        else{
+            Spacer(Modifier.height(10.dp))
+            HorizontalDivider(color = Color(0xFFEEEEEE))
+            Spacer(Modifier.height(10.dp))
+        }
+
     }
 }

@@ -424,7 +424,7 @@ fun AppLeadingIconTabPreview() {
                 text = { Text("Tab Item") },
                 modifier = Modifier.weight(1f),
                 icon = {
-                    Icon(
+                    AppIcon(
                         imageVector = Icons.Default.Home,
                         contentDescription = "Home Icon"
                     )
@@ -513,7 +513,7 @@ fun AppCustomLeadingIconTab(
                         Spacer(Modifier.height(10.dp))
                         Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 5.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
                             AppText("Share With", color = Color.DarkGray, fontSize = 13.sp)
-                            Icon(AppIcons.ArrowRight, contentDescription = "", tint = Color.Gray)
+                            AppIcon(AppIcons.ArrowRight, contentDescription = "", tint = Color.Gray)
                         }
                         Spacer(Modifier.height(2.dp))
                     }
@@ -534,13 +534,13 @@ fun AppCustomLeadingIconTab(
 fun AppCustomLeadingIconTabPreview(){
     val list = listOf(
         AppCustomLeadingIconTabItem(id = 1,text = {Text("Company", fontSize = 11.sp, fontWeight = FontWeight.Bold)},
-            icon = { Icon(modifier = Modifier.size(20.dp), imageVector = Icons.Default.Groups, contentDescription = "Home Icon") },
+            icon = { AppIcon(modifier = Modifier.size(20.dp), imageVector = Icons.Default.Groups, contentDescription = "Home Icon") },
             selected = remember { mutableStateOf(true) }
         ),
         AppCustomLeadingIconTabItem(id = 2,text ={Text("Private", fontSize = 10.sp, fontWeight = FontWeight.Bold)},
-            icon = { Icon(modifier = Modifier.size(20.dp),imageVector = Icons.Default.Group, contentDescription = "Home Icon") } ),
+            icon = { AppIcon(modifier = Modifier.size(20.dp),imageVector = Icons.Default.Group, contentDescription = "Home Icon") } ),
         AppCustomLeadingIconTabItem(id = 3,text ={Text("Personal", fontSize = 10.sp, fontWeight = FontWeight.Bold)},
-            icon = { Icon(modifier = Modifier.size(20.dp),imageVector = Icons.Default.Person, contentDescription = "Home Icon") } ,
+            icon = { AppIcon(modifier = Modifier.size(20.dp),imageVector = Icons.Default.Person, contentDescription = "Home Icon") } ,
             selected = remember { mutableStateOf(true) }),
     )
     Box(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp)){

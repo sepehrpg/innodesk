@@ -50,12 +50,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.common.extension.adjustWarmth
+import androidx.compose.ui.unit.sp
+import com.example.designsystem.extension.adjustWarmth
 import com.example.designsystem.component.AppCustomSearchBarBasicTextField
 import com.example.designsystem.component.AppFilledTonalIconButton
 import com.example.designsystem.component.AppGradientBackground
+import com.example.designsystem.component.AppIcon
 import com.example.designsystem.component.AppTabPager
 import com.example.designsystem.component.AppTabPagerItems
+import com.example.designsystem.component.AppText
 import com.example.designsystem.theme.AppTheme
 import com.example.designsystem.theme.GradientColor1
 import com.example.designsystem.theme.GradientColor2
@@ -127,7 +130,7 @@ private fun Header() {
     ) {
         Row(Modifier.fillMaxWidth()) {
             Box(Modifier.weight(1f)) {
-                Icon(
+                AppIcon(
                     painterResource(com.example.designsystem.R.drawable.core_designsystem_user_add),
                     modifier = Modifier.size(22.dp),
                     contentDescription = ""
@@ -136,7 +139,7 @@ private fun Header() {
             Box(Modifier.weight(2f), contentAlignment = Alignment.Center) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("Sepehrpg", color = Color.Black, fontWeight = FontWeight.Bold)
-                    Icon(
+                    AppIcon(
                         Icons.Rounded.UnfoldMore,
                         contentDescription = "",
                         Modifier.size(15.dp)
@@ -185,7 +188,7 @@ private fun Header() {
                             ), RoundedCornerShape(12.dp)
                         ),
                 ) {
-                    Icon(
+                    AppIcon(
                         imageVector = Icons.Filled.Menu,
                         contentDescription = "Menu",
                         tint = Color.DarkGray
@@ -237,7 +240,7 @@ private fun Body(
 
 
 private fun tabItem(context:Context,pageIndex:Int): List<AppTabPagerItems> = buildList {
-    repeat(7) { index ->
+    repeat(6) { index ->
         add(
             AppTabPagerItems(
                 title = when (index) {
@@ -260,7 +263,7 @@ private fun tabItem(context:Context,pageIndex:Int): List<AppTabPagerItems> = bui
                     else -> GradientColor7.bottom.adjustWarmth(50)
                 },
                 icon = {
-                    Icon(
+                    AppIcon(
                         imageVector = when (index) {
                             0 -> Icons.Filled.Work
                             1 -> Icons.Filled.Settings
@@ -315,13 +318,13 @@ private fun tabItem(context:Context,pageIndex:Int): List<AppTabPagerItems> = bui
                     ) {
                         when (index) {
                             0 -> ProjectsScreen()
-                            1 -> Text("Settings Content")
-                            2 -> Text("Info Content")
-                            3 -> Text("Star Content")
-                            4 -> Text("Search Content")
-                            5 -> Text("EmojiEvents Content")
-                            6 -> Text("Call Content")
-                            else -> Text("Other")
+                            1 -> AppText("Settings Content", fontSize = 13.sp)
+                            2 -> AppText("Info Content", fontSize = 13.sp)
+                            3 -> AppText("Star Content", fontSize = 13.sp)
+                            4 -> AppText("Search Content", fontSize = 13.sp)
+                            5 -> AppText("EmojiEvents Content", fontSize = 13.sp)
+                            6 -> AppText("Call Content", fontSize = 13.sp)
+                            else -> AppText("Other", fontSize = 13.sp)
                         }
                     }
 

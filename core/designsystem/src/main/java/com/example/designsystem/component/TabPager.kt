@@ -116,7 +116,7 @@ fun AppTabPager(
                     Text(
                         text = tabTitle,
                         style = MaterialTheme.typography.labelLarge.copy(
-                            fontSize = 14.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                             color =
@@ -252,22 +252,22 @@ private fun AppTabPagerPreview(){
         val tabItems = listOf(
             AppTabPagerItems(
                 title = "Home",
-                icon = { Icon(imageVector = Icons.Filled.Home, contentDescription = "Home", modifier = Modifier.size(18.dp)) },
+                icon = { AppIcon(imageVector = Icons.Filled.Home, contentDescription = "Home", modifier = Modifier.size(18.dp)) },
                 contentScreens = { Surface(modifier = Modifier.fillMaxSize(), color = Color.White) { Text("Home Content", modifier = Modifier.padding(16.dp)) } }
             ),
             AppTabPagerItems(
                 title = "Settings",
-                icon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = "Settings", modifier = Modifier.size(18.dp)) },
+                icon = { AppIcon(imageVector = Icons.Filled.Settings, contentDescription = "Settings", modifier = Modifier.size(18.dp)) },
                 contentScreens = { Surface(modifier = Modifier.fillMaxSize(), color = Color.White) { Text("Settings Content", modifier = Modifier.padding(16.dp)) } }
             ),
             AppTabPagerItems(
                 title = "Info",
-                icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = "Info", modifier = Modifier.size(18.dp)) },
+                icon = { AppIcon(imageVector = Icons.Filled.Info, contentDescription = "Info", modifier = Modifier.size(18.dp)) },
                 contentScreens = { Surface(modifier = Modifier.fillMaxSize(), color = Color.White) { Text("Info Content", modifier = Modifier.padding(16.dp)) } }
             ),
             AppTabPagerItems(
                 title = "Star",
-                icon = { Icon(imageVector = Icons.Filled.Star, contentDescription = "Star", modifier = Modifier.size(18.dp)) },
+                icon = { AppIcon(imageVector = Icons.Filled.Star, contentDescription = "Star", modifier = Modifier.size(18.dp)) },
                 contentScreens = { Surface(modifier = Modifier.fillMaxSize(), color = Color.White) { Text("Star Content", modifier = Modifier.padding(16.dp)) } }
             )
         )

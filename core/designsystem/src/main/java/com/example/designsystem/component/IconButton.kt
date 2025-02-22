@@ -303,7 +303,7 @@ private fun AppIconButtonsPreview() {
             ),
             boxModifier = Modifier.shadow(2.dp,RoundedCornerShape(12.dp)).background(Brush.horizontalGradient(listOf(Color(0xFFEEEEEE),Color.White)),RoundedCornerShape(12.dp)),
         ) {
-            Icon(
+            AppIcon(
                 imageVector = Icons.Filled.Settings,
                 contentDescription = "Settings"
             )
@@ -314,7 +314,7 @@ private fun AppIconButtonsPreview() {
         AppIconButton(
             onClick = { /* Handle click */ }
         ) {
-            Icon(
+            AppIcon(
                 imageVector = Icons.Filled.Home,
                 contentDescription = "Home"
             )
@@ -324,7 +324,7 @@ private fun AppIconButtonsPreview() {
             onClick = { /* Handle click */ },
             shape = RoundedCornerShape(7.dp)
         ) {
-            Icon(
+            AppIcon(
                 imageVector = Icons.Filled.Favorite,
                 contentDescription = "Favorite"
             )
@@ -333,7 +333,7 @@ private fun AppIconButtonsPreview() {
         AppFilledTonalIconButton(
             onClick = { /* Handle click */ }
         ) {
-            Icon(
+            AppIcon(
                 imageVector = Icons.Filled.Settings,
                 contentDescription = "Settings"
             )
@@ -342,7 +342,7 @@ private fun AppIconButtonsPreview() {
         AppOutlinedIconButton(
             onClick = { /* Handle click */ }
         ) {
-            Icon(
+            AppIcon(
                 imageVector = Icons.Filled.Home,
                 contentDescription = "Outlined Home"
             )
@@ -352,7 +352,7 @@ private fun AppIconButtonsPreview() {
             checked = toggleState1.value,
             onCheckedChange = { toggleState1.value = it }
         ) {
-            Icon(
+            AppIcon(
                 imageVector = Icons.Filled.Favorite,
                 contentDescription = "Icon Toggle"
             )
@@ -362,7 +362,7 @@ private fun AppIconButtonsPreview() {
             checked = toggleState2.value,
             onCheckedChange = { toggleState2.value = it }
         ) {
-            Icon(
+            AppIcon(
                 imageVector = Icons.Filled.Favorite,
                 contentDescription = "Filled Icon Toggle"
             )
@@ -372,7 +372,7 @@ private fun AppIconButtonsPreview() {
             checked = toggleState3.value,
             onCheckedChange = { toggleState3.value = it }
         ) {
-            Icon(
+            AppIcon(
                 imageVector = Icons.Filled.Favorite,
                 contentDescription = "Filled Tonal Icon Toggle"
             )
@@ -382,7 +382,7 @@ private fun AppIconButtonsPreview() {
             checked = toggleState4.value,
             onCheckedChange = { toggleState4.value = it }
         ) {
-            Icon(
+            AppIcon(
                 imageVector = Icons.Filled.Favorite,
                 contentDescription = "Outlined Icon Toggle"
             )

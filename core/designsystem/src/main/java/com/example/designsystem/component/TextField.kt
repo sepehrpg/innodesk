@@ -233,6 +233,7 @@ fun AppCustomSearchBarBasicTextField(
     cursorBrush: Brush = SolidColor(Color.Black),
     brush: Brush = Brush.horizontalGradient(listOf(Color.White,Color.Gray)),
     shape: Shape = RoundedCornerShape(20.dp),
+    shadowValue:Dp = 2.dp,
     height: Dp = 48.dp,
     clearTextField: () -> Unit = {},
     placeholder: @Composable (() -> Unit)? = {
@@ -247,7 +248,7 @@ fun AppCustomSearchBarBasicTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(height)
-                    .shadow(elevation = 2.dp, shape)
+                    .shadow(elevation = shadowValue, shape)
                     .clip(shape)
                     .background(brush), contentAlignment = Alignment.CenterStart
             ) {
@@ -257,7 +258,7 @@ fun AppCustomSearchBarBasicTextField(
                         .padding(vertical = 10.dp, horizontal = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
+                    AppIcon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search Icon",
                         tint = Color.DarkGray
@@ -270,7 +271,7 @@ fun AppCustomSearchBarBasicTextField(
                     }
                     if (value.isNotEmpty()){
                         AppIconButton(onClick ={ clearTextField() }) {
-                            Icon(
+                            AppIcon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Close Icon",
                             )
@@ -361,8 +362,8 @@ private fun AppTextFieldPreview2() {
                     onValueChange = { text = it },
                     label = { Text("Label") },
                     placeholder = { Text("Enter text here") },
-                    leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon") },
-                    trailingIcon = { Icon(imageVector = Icons.Default.Check, contentDescription = "Check Icon") },
+                    leadingIcon = { AppIcon(imageVector = Icons.Default.Email, contentDescription = "Email Icon") },
+                    trailingIcon = { AppIcon(imageVector = Icons.Default.Check, contentDescription = "Check Icon") },
                     supportingText = { Text("Supporting text goes here") },
                     isError = false,
                     singleLine = true,
@@ -442,7 +443,7 @@ private fun AppTextFieldPreview2() {
                                     .padding(vertical = 10.dp, horizontal = 10.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(
+                                AppIcon(
                                     imageVector = Icons.Default.Search,
                                     contentDescription = "Search Icon",
                                     modifier = Modifier.padding(end = 8.dp)
@@ -467,8 +468,8 @@ private fun AppTextFieldPreview2() {
                     onValueChange = { },
                     label = { Text("Label") },
                     placeholder = { Text("Placeholder") },
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
-                    trailingIcon = { Icon(Icons.Default.Clear, contentDescription = "Clear Icon") },
+                    leadingIcon = { AppIcon(Icons.Default.Search, contentDescription = "Search Icon") },
+                    trailingIcon = { AppIcon(Icons.Default.Clear, contentDescription = "Clear Icon") },
                     supportingText = { Text("This is supporting text") },
                     isError = false,
                     singleLine = true

@@ -56,6 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.designsystem.component.AppIcon
 
 
 //Example
@@ -84,11 +85,11 @@ fun TextFieldWithIconsExample() {
         label = { Text("Search") },
         placeholder = { Text("Type here...") },
         singleLine = true,
-        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search Icon") },
+        leadingIcon = { AppIcon(Icons.Filled.Search, contentDescription = "Search Icon") },
         trailingIcon = {
             if (text.value.isNotEmpty()) {
                 IconButton(onClick = { text.value = "" }) {
-                    Icon(Icons.Filled.Clear, contentDescription = "Clear Text")
+                    AppIcon(Icons.Filled.Clear, contentDescription = "Clear Text")
                 }
             }
         },
@@ -136,11 +137,11 @@ fun SearchBarTextFieldExample() {
         onValueChange = { query.value = it },
         placeholder = { Text("Search...") },
         singleLine = true,
-        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search Icon") },
+        leadingIcon = { AppIcon(Icons.Filled.Search, contentDescription = "Search Icon") },
         trailingIcon = {
             if (query.value.isNotEmpty()) {
                 IconButton(onClick = { query.value = "" }) {
-                    Icon(Icons.Filled.Clear, contentDescription = "Clear Text")
+                    AppIcon(Icons.Filled.Clear, contentDescription = "Clear Text")
                 }
             }
         },
@@ -164,7 +165,7 @@ fun PasswordTextFieldWithToggleExample() {
             val image = if (passwordVisible) Icons.Filled.Lock else Icons.Filled.CheckCircle
             val description = if (passwordVisible) "Hide password" else "Show password"
             IconButton(onClick = { setPasswordVisible(!passwordVisible) }) {
-                Icon(image, contentDescription = description)
+                AppIcon(image, contentDescription = description)
             }
         },
         modifier = Modifier
@@ -184,10 +185,10 @@ fun EnhancedTextFieldExample() {
         onValueChange = { text.value = it },
         label = { Text("Label") },
         placeholder = { Text("Enter text") },
-        leadingIcon = { Icon(Icons.Filled.Info, contentDescription = "Info") },
+        leadingIcon = { AppIcon(Icons.Filled.Info, contentDescription = "Info") },
         trailingIcon = {
             IconButton(onClick = { text.value = "" }) {
-                Icon(Icons.Filled.Clear, contentDescription = "Clear")
+                AppIcon(Icons.Filled.Clear, contentDescription = "Clear")
             }
         },
         isError = text.value.length > 10,

@@ -8,8 +8,13 @@ import androidx.preference.PreferenceManager
 import com.example.sharedpref.model.FakeUser
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+
+//This Class Is Incorrect Because Of Thread.IO
+/*
 class SharedPreferencesManagerImpl @Inject constructor(
     @ApplicationContext context: Context,
     private val gson: Gson
@@ -20,7 +25,9 @@ class SharedPreferencesManagerImpl @Inject constructor(
 
     //Model :: Save And Get
     //..............................................................................................
-    /** Use Fake User Data And You Should Add Real User Data */
+    */
+/** Use Fake User Data And You Should Add Real User Data *//*
+
     override fun saveUser(user: FakeUser) {
         sharedPref.edit {
             putString(PREF_FIRST_NAME, user.firstName)
@@ -46,13 +53,15 @@ class SharedPreferencesManagerImpl @Inject constructor(
             putString(PREF_TEST_JSON_OBJECT,jsonData)
         }
     }
-    /**
+    */
+/**
      * Get object
      * Example Usage :: val objectData = sharedPrefManager.getObject(FakeUser::class.java)
      * @param T
      * @param clazz
      * @return
-     */
+     *//*
+
     override fun <T> getObject(clazz: Class<T>): T? {
         val json: String? = sharedPref.getString(PREF_TEST_JSON_OBJECT, null)
         return gson.fromJson(json, clazz)
@@ -129,4 +138,4 @@ class SharedPreferencesManagerImpl @Inject constructor(
     }
     //..............................................................................................
 
-}
+}*/

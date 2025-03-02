@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -19,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.EmojiEvents
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
@@ -27,7 +25,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material.icons.rounded.UnfoldMore
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -40,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -68,7 +64,12 @@ import com.example.designsystem.theme.GradientColor5
 import com.example.designsystem.theme.GradientColor6
 import com.example.designsystem.theme.GradientColor7
 import com.example.designsystem.theme.GradientColors
+import com.innodesk.project_management.projects.ProjectUpsertScreen
 import com.innodesk.project_management.projects.ProjectsScreen
+import com.innodesk.project_management.templates.TemplateStatusScreen
+import com.innodesk.project_management.templates.TemplatesScreen
+import com.innodesk.project_management.templates.TemplateUpsertScreen
+import com.innodesk.project_management.utils.TypeScreen
 
 
 @Composable
@@ -90,9 +91,10 @@ fun ProjectManagementMainScreen() {
                         if (isPreview) Modifier else Modifier
                             .statusBarsPadding()
                             .navigationBarsPadding()
-                    )) {
+                    )
+            ) {
                 Column(Modifier.fillMaxSize()) {
-                    Column(Modifier.weight(1f)){
+                    Column(Modifier.weight(1f)) {
                         Header()
                         Body(changeBackgroundColor = {
                             it?.let { gradientBackgroundColor = it }
@@ -114,9 +116,6 @@ fun ProjectManagementMainScreen() {
         }
     }
 }
-
-
-
 
 
 @Composable
@@ -164,7 +163,7 @@ private fun Header() {
                     onValueChange = { search = it },
                     shape = RoundedCornerShape(15.dp),
                     height = 45.dp,
-                    brush = Brush.horizontalGradient(listOf(Color(0xFFEEEEEE),Color.White))
+                    brush = Brush.horizontalGradient(listOf(Color(0xFFEEEEEE), Color.White))
                 )
             }
             Spacer(Modifier.width(12.dp))
@@ -216,7 +215,7 @@ private fun Body(
             )
             .background(Color.White)
         AppTabPager(
-            tabs = tabItem(context,pageIndex),
+            tabs = tabItem(context, pageIndex),
             scrollableTab = true,
             pagerModifier = mod,
             tabContainerColor = Color.Transparent,
@@ -230,7 +229,7 @@ private fun Body(
             dividerColor = Color.Transparent,
             dividerThickness = 0.dp,
             pageIndexCallBack = {
-                changeBackgroundColor(tabItem(context,pageIndex)[it].gradientColorsList)
+                changeBackgroundColor(tabItem(context, pageIndex)[it].gradientColorsList)
                 pageIndex = it
             }
         )
@@ -238,8 +237,7 @@ private fun Body(
 }
 
 
-
-private fun tabItem(context:Context,pageIndex:Int): List<AppTabPagerItems> = buildList {
+private fun tabItem(context: Context, pageIndex: Int): List<AppTabPagerItems> = buildList {
     repeat(6) { index ->
         add(
             AppTabPagerItems(
@@ -318,24 +316,30 @@ private fun tabItem(context:Context,pageIndex:Int): List<AppTabPagerItems> = bui
                     ) {
                         when (index) {
                             0 -> ProjectsScreen()
-                            1 -> AppText("Settings Content", fontSize = 13.sp)
-                            2 -> AppText("Info Content", fontSize = 13.sp)
-                            3 -> AppText("Star Content", fontSize = 13.sp)
-                            4 -> AppText("Search Content", fontSize = 13.sp)
+                            1 -> TemplatesScreen()
+                            2 -> TemplateUpsertScreen()
+                            3 -> TemplateStatusScreen(
+                                onDelete = {},
+                                onChangeTemplateStatusName = {},
+                                onChangeTemplateStatusColor = {}
+                            )
+                            4 -> ProjectUpsertScreen(
+                                projectsEntity = null,
+                                onValueChangeProjectName = { },
+                                onValueChangeColorValue = { },
+                                onValueChangeProjectAccess = { },
+                                onDeleteProject = { },
+                            )
                             5 -> AppText("EmojiEvents Content", fontSize = 13.sp)
                             6 -> AppText("Call Content", fontSize = 13.sp)
                             else -> AppText("Other", fontSize = 13.sp)
                         }
                     }
-
-
                 }
             )
         )
     }
 }
-
-
 
 
 @Preview(showBackground = true)

@@ -443,27 +443,14 @@ data class AppCustomLeadingIconTabItem(
     val text: @Composable () -> Unit,
     val icon: @Composable () -> Unit,
     val description: String? = null,
-    var selected: MutableState<Boolean> = mutableStateOf(false),
+    var selected: Boolean = false,
     val modifier: Modifier? = null,
     val enabled: Boolean? = null,
     val additionalUi: Boolean = false,
     val selectedContentColor: Color? = null,
     val unselectedContentColor: Color? = null,
     val interactionSource: MutableInteractionSource? = null
-){
-
-    fun nonSelected(){
-        selected.value  = false
-    }
-
-    fun isSelected(){
-        selected.value  = true
-    }
-
-    fun toggleSelection() {
-        selected.value = !selected.value
-    }
-}
+)
 
 @Composable
 fun AppCustomLeadingIconTab(
@@ -486,9 +473,9 @@ fun AppCustomLeadingIconTab(
         Column(Modifier.fillMaxWidth()){
             Row(rowModifier.height(52.dp)){
                 repeat(item.size){ index->
-                    if (item[index].selected.value) selected = index
+                    if (item[index].selected) selected = index
                     LeadingIconTab(
-                        selected = item[index].selected.value,
+                        selected = item[index].selected,
                         onClick = {
                             onClick(index)
                             selected = index
@@ -496,7 +483,7 @@ fun AppCustomLeadingIconTab(
                         text = item[index].text,
                         icon = item[index].icon,
                         modifier = Modifier.weight(1f).padding(horizontal = 5.dp, vertical = 5.dp)
-                            .then(if (item[index].selected.value) selectedModifier else item[index].modifier?:modifier ),
+                            .then(if (item[index].selected) selectedModifier else item[index].modifier?:modifier ),
                         enabled = item[index].enabled?:enabled,
                         selectedContentColor = item[index].selectedContentColor?:selectedContentColor,
                         unselectedContentColor = item[index].unselectedContentColor?:unselectedContentColor,
@@ -506,7 +493,7 @@ fun AppCustomLeadingIconTab(
             }
 
             if (selected!=null){
-                if (item[selected!!].selected.value && !item[selected!!].description.isNullOrEmpty()){
+                if (item[selected!!].selected && !item[selected!!].description.isNullOrEmpty()){
                     HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
 
                     if(item[selected!!].additionalUi){
@@ -535,13 +522,13 @@ fun AppCustomLeadingIconTabPreview(){
     val list = listOf(
         AppCustomLeadingIconTabItem(id = 1,text = {Text("Company", fontSize = 11.sp, fontWeight = FontWeight.Bold)},
             icon = { AppIcon(modifier = Modifier.size(20.dp), imageVector = Icons.Default.Groups, contentDescription = "Home Icon") },
-            selected = remember { mutableStateOf(true) }
+            selected = true
         ),
         AppCustomLeadingIconTabItem(id = 2,text ={Text("Private", fontSize = 10.sp, fontWeight = FontWeight.Bold)},
             icon = { AppIcon(modifier = Modifier.size(20.dp),imageVector = Icons.Default.Group, contentDescription = "Home Icon") } ),
         AppCustomLeadingIconTabItem(id = 3,text ={Text("Personal", fontSize = 10.sp, fontWeight = FontWeight.Bold)},
             icon = { AppIcon(modifier = Modifier.size(20.dp),imageVector = Icons.Default.Person, contentDescription = "Home Icon") } ,
-            selected = remember { mutableStateOf(true) }),
+            selected = true),
     )
     Box(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp)){
         AppCustomLeadingIconTab(
@@ -549,8 +536,7 @@ fun AppCustomLeadingIconTabPreview(){
             selectedContentColor = GradientColor1.bottom,
             unselectedContentColor = Color.Gray,
             onClick = {
-                list.map { it.nonSelected() }
-                list[it].isSelected()
+
             }
         )
     }

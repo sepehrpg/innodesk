@@ -24,15 +24,18 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply {
-                //JUST FOR TEST
-                //Application Feature Module
-                apply("project.android.application")
-                apply("project.android.application.compose")
 
                 //REAL
                 //Library Feature Module
-                //apply("project.android.library")
-                //apply("project.android.library.compose")
+                apply("project.android.library")
+                apply("project.android.library.compose")
+
+                //JUST FOR TEST
+                //Application Feature Module
+                //apply("project.android.application")
+                //apply("project.android.application.compose")
+
+
 
                 apply("project.compose.component")
                 apply("project.android.hilt")
@@ -48,6 +51,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             dependencies {
                 add("implementation", project(":core:designsystem"))
                 add("implementation", project(":core:common"))
+                add("implementation", project(":core:data"))
                 //add("implementation", project(":core:ui"))
 
                 //add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())

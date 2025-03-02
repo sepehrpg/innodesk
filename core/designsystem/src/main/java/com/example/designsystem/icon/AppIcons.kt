@@ -34,6 +34,7 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Colorize
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.DragIndicator
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.FormatListNumbered
 import androidx.compose.material.icons.rounded.Grid3x3
@@ -81,6 +82,7 @@ object AppIcons {
     val Colorize = Icons.Rounded.Colorize
     val DragIndicator = Icons.Rounded.DragIndicator
     val Delete = Icons.Rounded.Delete
+    val Edit = Icons.Rounded.Edit
 
 
 }

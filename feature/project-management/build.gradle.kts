@@ -1,30 +1,14 @@
 plugins {
     alias(libs.plugins.project.android.feature)
 }
+val debugDebuggable by extra(true)
 
 android {
     namespace = "com.innodesk.project_management"
-
-    defaultConfig {
-
-        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        //consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-
 }
 
 dependencies {
-    implementation(project(":core:database"))
+    api(project(":core:database"))
 
     //implementation(libs.androidx.core.ktx)
     //implementation(libs.androidx.appcompat)

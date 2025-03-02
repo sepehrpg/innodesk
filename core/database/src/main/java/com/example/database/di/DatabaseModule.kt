@@ -1,5 +1,7 @@
 package com.example.database.di
+
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -13,7 +15,6 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.jetbrains.annotations.Async.Execute
 import java.util.concurrent.Executors
 import javax.inject.Singleton
 
@@ -28,20 +29,12 @@ internal object DatabaseModule {
         context,
         RoomDb::class.java,
         "app_db",
-    ).addCallback(object : RoomDatabase.Callback() {
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            Executors.newSingleThreadExecutor().execute {
-                val dao = providesDatabase(context).templatesDao()
-                CoroutineScope(Dispatchers.IO).launch {
-                    dao.insertAllArticles(
-                        listOf(
-                            TemplatesEntity( name = "Kanban"),
-                            TemplatesEntity( name = "Scrum"),
-                        )
-                    )
-                }
-            }
-        }
-    }).fallbackToDestructiveMigration().build()
+    ).addCallback(createDatabaseCallback(context))
+     //.fallbackToDestructiveMigration()
+     .setQueryCallback(createQueryCallback(), Executors.newSingleThreadExecutor())
+     .build()
 }
+
+
+
+

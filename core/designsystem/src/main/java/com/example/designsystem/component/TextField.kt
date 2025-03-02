@@ -511,6 +511,7 @@ fun AppOutlineTextFieldStatic1(
     AppOutlineTextField(
         value = value,
         onValueChange = onValueChange,
+        textStyle = TextStyle(fontSize = 14.sp),
         modifier = Modifier
             .fillMaxWidth().background(ClickUpWhiteBackground)
             .height(52.dp),

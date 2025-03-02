@@ -4,6 +4,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 
 
+
+fun Color.Companion.hexStringToColor(colorString: String?): Color? {
+    return try {
+        if (colorString==null) return null
+        else Color(android.graphics.Color.parseColor(colorString))
+    }
+    catch (e:Exception){
+        null
+    }
+}
+
+fun Color.toHexString(): String {
+    val red = (this.red * 255).toInt()
+    val green = (this.green * 255).toInt()
+    val blue = (this.blue * 255).toInt()
+    val alpha = (this.alpha * 255).toInt() // مقدار alpha
+
+    return "#${Integer.toHexString(alpha).padStart(2, '0')}" +
+            Integer.toHexString(red).padStart(2, '0') +
+            Integer.toHexString(green).padStart(2, '0') +
+            Integer.toHexString(blue).padStart(2, '0')
+}
+
+
 fun Color.enhanceSaturation(factor: Float = 0.8f): Color {
     val hsv = FloatArray(3)
     android.graphics.Color.colorToHSV(this.toArgb(), hsv)

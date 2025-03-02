@@ -9,6 +9,7 @@ data class TemplatesEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")  val id:Int=0,
+    @ColumnInfo(name = "user_id") val userId:Int?= null,
 
     @ColumnInfo(name = "name") val name:String,
     @ColumnInfo(name = "description") val description:String? = null,

@@ -61,6 +61,6 @@ interface Templates {
     // Fetch template with its statuses
     @Transaction
     @Query("SELECT * FROM templates WHERE id = :templateId")
-    fun templateWithStatusList(templateId: Int): Flow<TemplateWithStatuses>
+    fun templateWithStatusList(templateId: Int): Flow<TemplateWithStatuses?>?
 
 }

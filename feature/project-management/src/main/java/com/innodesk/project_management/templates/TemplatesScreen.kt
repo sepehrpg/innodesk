@@ -46,7 +46,9 @@ import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TemplatesScreen(viewModel: ProjectsViewModel = hiltViewModel()) {
+fun TemplatesScreen(
+    viewModel: ProjectsViewModel = hiltViewModel()
+) {
 
     val templateList by viewModel.templateList.collectAsState(initial = emptyList())
 
@@ -59,17 +61,28 @@ fun TemplatesScreen(viewModel: ProjectsViewModel = hiltViewModel()) {
             templatesEntity = templatesEntity,
             onCancelClick = {
                 templatesEntity = null
-                viewModel.clearTempTemplateStatus()
+                viewModel.clearUpsertTemplate()
+                openBottomSheet = false
+            },
+            onDeleteTemplate = {
+                viewModel.deleteTemplate(templatesEntity)
                 openBottomSheet = false
             },
             onDoneClick = {
+                if(templatesEntity!=null){
+                    // In Database
+                    viewModel.updateTemplates(templatesEntity)
+                }
+                else{
+                    //Not In Database
+                    viewModel.insertTemplate()
+                }
                 templatesEntity = null
-                viewModel.clearTempTemplateStatus()
                 openBottomSheet = false
             },
             onDismissRequest = {
                 templatesEntity = null
-                viewModel.clearTempTemplateStatus()
+                viewModel.clearUpsertTemplate()
                 openBottomSheet = false
             }
         )

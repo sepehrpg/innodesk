@@ -10,6 +10,8 @@ import com.example.database.model.pm.templates.TemplatesEntity
 import com.example.database.model.pm.templates.TemplatesStatusEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -79,11 +81,16 @@ class OfflineTemplatesRepository @Inject constructor(
         }
     }
 
-    override fun templateWithStatusList(templateId: Int): Flow<TemplateWithStatuses> {
+    override fun templateWithStatusList(templateId: Int): Flow<TemplateWithStatuses?> {
         return projectManagementDao.templateWithStatusList(templateId)
-            .onStart { Timber.d("Call Flow : templateWithStatusList") }
-            .onEach { Timber.d("On Each Call : templateWithStatusList") }
-            .flowOn(ioDispatcher)
+            ?.catch {
+                emit(null)
+            }
+            ?.onStart { Timber.d("Call Flow : templateWithStatusList") }
+            ?.onEach { Timber.d("On Each Call : templateWithStatusList") }
+            ?.flowOn(ioDispatcher)?: flow {
+                emit(null)
+        }
     }
 
 

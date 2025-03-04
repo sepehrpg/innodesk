@@ -69,7 +69,6 @@ import com.innodesk.project_management.projects.ProjectsScreen
 import com.innodesk.project_management.templates.TemplateStatusScreen
 import com.innodesk.project_management.templates.TemplatesScreen
 import com.innodesk.project_management.templates.TemplateUpsertScreen
-import com.innodesk.project_management.utils.TypeScreen
 
 
 @Composable
@@ -317,7 +316,7 @@ private fun tabItem(context: Context, pageIndex: Int): List<AppTabPagerItems> = 
                         when (index) {
                             0 -> ProjectsScreen()
                             1 -> TemplatesScreen()
-                            2 -> TemplateUpsertScreen()
+                            2 -> TemplateUpsertScreen(onCallBack = {})
                             3 -> TemplateStatusScreen(
                                 onDelete = {},
                                 onChangeTemplateStatusName = {},
@@ -325,9 +324,6 @@ private fun tabItem(context: Context, pageIndex: Int): List<AppTabPagerItems> = 
                             )
                             4 -> ProjectUpsertScreen(
                                 projectsEntity = null,
-                                onValueChangeProjectName = { },
-                                onValueChangeColorValue = { },
-                                onValueChangeProjectAccess = { },
                                 onDeleteProject = { },
                             )
                             5 -> AppText("EmojiEvents Content", fontSize = 13.sp)

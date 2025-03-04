@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.database.model.pm.project.ProjectAccess
 import com.example.database.model.pm.project.ProjectsEntity
 import com.example.designsystem.component.AppColorPickerLibrary1
@@ -61,10 +62,8 @@ import com.innodesk.project_management.utils.TypeScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProjectUpsertScreen(
+    viewModel: ProjectsViewModel = hiltViewModel(),
     projectsEntity: ProjectsEntity?,
-    onValueChangeProjectName: (String) -> Unit,
-    onValueChangeColorValue: (Color) -> Unit,
-    onValueChangeProjectAccess: (ProjectAccess) -> Unit,
     onDeleteProject: (ProjectsEntity?) -> Unit,
 ) {
 
@@ -98,7 +97,7 @@ fun ProjectUpsertScreen(
         onDismissRequest = { showDialog = false },
         colorValue = {
             colorValue = it
-            onValueChangeColorValue(it)
+            viewModel.updateProjectColor(it)
         }
     )
 
@@ -110,7 +109,6 @@ fun ProjectUpsertScreen(
                 openBottomSheet = false
             },
             onDoneClick = {
-
             },
             onDismissRequest = {
                 openBottomSheet = false
@@ -140,7 +138,7 @@ fun ProjectUpsertScreen(
                         placeHolder = "Enter project name",
                         onValueChange = {
                             projectName = it
-                            onValueChangeProjectName(projectName)
+                            viewModel.updateProjectName(projectName)
                         }
                     )
                 }
@@ -193,7 +191,7 @@ fun ProjectUpsertScreen(
                             //list.map { it.nonSelected() }
                             //list[it].isSelected()
                             tempSelected = ProjectAccess.entries[it]
-                            onValueChangeProjectAccess(ProjectAccess.entries[it])
+                            viewModel.updateProjectAccessId(ProjectAccess.entries[it])
                         }
                     )
                 }
@@ -391,9 +389,6 @@ private fun ProjectUpsertScreenPreview() {
     var open = remember { mutableStateOf(true) }
     ProjectUpsertScreen(
         projectsEntity = null,
-        onValueChangeProjectName = { },
-        onValueChangeColorValue = { },
-        onValueChangeProjectAccess = { },
         onDeleteProject = { },
     )
 }

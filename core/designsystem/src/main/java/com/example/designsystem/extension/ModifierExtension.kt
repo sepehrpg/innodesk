@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.BlurMaskFilter
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
@@ -213,11 +215,6 @@ fun Modifier.borderSide(
 
 
 
-
-
-
-
-
 fun Modifier.dottedLine(
     color: Color = Color.Black,
     dotRadius: Dp = 4.dp,
@@ -241,3 +238,11 @@ fun Modifier.dottedLine(
         currentX += 2 * radiusPx + gapPx
     }
 }
+
+
+
+
+
+
+
+

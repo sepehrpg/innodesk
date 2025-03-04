@@ -34,8 +34,7 @@ import com.example.designsystem.component.AppText
 import com.example.designsystem.extension.clickableWithNoRipple
 import com.example.designsystem.icon.AppIcons
 import com.example.designsystem.theme.PrimaryColor
-import com.innodesk.project_management.projects.component.BottomSheetsProject
-import timber.log.Timber
+import com.innodesk.project_management.projects.component.BottomSheetsProjectUpsert
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,17 +60,8 @@ fun ProjectsScreen(
         }
     )
 
-    BottomSheetsProject(
+    BottomSheetsProjectUpsert(
         isVisible = isVisibleBottomSheet,
-        projectsEntity = selectedProject,
-        onValueChangeProjectName = viewModel::updateProjectName,
-        onValueChangeColorValue = viewModel::updateProjectColor,
-        onValueChangeProjectAccess = viewModel::updateProjectAccessId,
-        onDeleteProject = {
-            viewModel.deleteProjectEntity(it)
-            isVisibleBottomSheet = false
-            selectedProject = null
-        },
         onDismissRequest = {
             selectedProject = null
             isVisibleBottomSheet = false
@@ -86,6 +76,12 @@ fun ProjectsScreen(
             selectedProject = null
             isVisibleBottomSheet = false
 
+        },
+        projectsEntity = selectedProject,
+        onDeleteProject = {
+            viewModel.deleteProjectEntity(it)
+            isVisibleBottomSheet = false
+            selectedProject = null
         },
     )
 

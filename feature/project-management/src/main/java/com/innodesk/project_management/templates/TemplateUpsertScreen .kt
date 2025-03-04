@@ -14,12 +14,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +42,9 @@ import com.example.designsystem.component.AppElevatedButtonWithIcon
 import com.example.designsystem.component.AppIcon
 import com.example.designsystem.component.AppOutlineTextFieldStatic1
 import com.example.designsystem.component.AppText
+import com.example.designsystem.component.dragContainer
+import com.example.designsystem.component.draggableItems
+import com.example.designsystem.component.rememberDragDropState
 import com.example.designsystem.extension.clickableWithNoRipple
 import com.example.designsystem.extension.hexStringToColor
 import com.example.designsystem.icon.AppIcons
@@ -47,14 +52,14 @@ import com.example.designsystem.theme.ClickUpGray4
 import com.example.designsystem.theme.ClickUpPink1
 import com.innodesk.project_management.projects.ProjectsViewModel
 import com.innodesk.project_management.templates.component.BottomSheetTemplateStatus
-import timber.log.Timber
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TemplateUpsertScreen(
     viewModel: ProjectsViewModel = hiltViewModel(),
-    templatesEntity: TemplatesEntity? = null
+    templatesEntity: TemplatesEntity? = null,
+    onCallBack: () -> Unit,
 ) {
     var templatesStatusEntity:TemplatesStatusEntity? by remember { mutableStateOf(null) }
     var tempTemplatesStatusEntity:TemplatesStatusEntity? by remember { mutableStateOf(null) }
@@ -66,7 +71,11 @@ fun TemplateUpsertScreen(
         AppDeleteDialog(
             onDismissRequest = { openDeleteDialog = false },
             properties = DialogProperties(),
-            onDelete = {})
+            onDelete = {
+                onCallBack()
+                viewModel.deleteTemplate(templatesEntity)
+                openDeleteDialog = false
+            })
     }
 
     var openBottomSheet by remember { mutableStateOf(false) }
@@ -81,7 +90,6 @@ fun TemplateUpsertScreen(
 
             },
             onDoneClick = {
-                Timber.tag("ASDJKXCAS").d("ONDONECLICK")
                 if (templatesEntity!=null){
                     // BE IN DATABASE
                     if (templatesStatusEntity!=null){
@@ -90,7 +98,7 @@ fun TemplateUpsertScreen(
                     }
                     else{
                         // INSERT
-                        viewModel.insertTemplateStatusEntityInTemplateUpdated(templatesEntity)
+                        viewModel.insertTemplateStatusEntity(templatesEntity)
                     }
                 }
                 else{
@@ -104,7 +112,6 @@ fun TemplateUpsertScreen(
                         viewModel.insertTempTemplateStatus()
                     }
                 }
-
                 openBottomSheet = false
                 templatesStatusEntity = null
                 tempTemplatesStatusEntity = null
@@ -134,10 +141,26 @@ fun TemplateUpsertScreen(
         )
     }
 
+
+
+    val draggableItems by remember {
+        derivedStateOf { uiState.tempTemplateStatusList.size }
+    }
+    val stateList = rememberLazyListState()
+    val dragDropState =
+        rememberDragDropState(
+            lazyListState = stateList,
+            draggableItemsNum = draggableItems,
+            onMove = { fromIndex, toIndex ->
+                viewModel.onMove(fromIndex,toIndex)
+                //uiState.tempTemplateStatusList = uiState.tempTemplateStatusList.toMutableList().apply { add(toIndex, removeAt(fromIndex))}
+            })
+
+
     Column {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().dragContainer(dragDropState),
+            state = stateList,
         ) {
             item {
                 var templateName: String by remember { mutableStateOf(templatesEntity?.name?:"") }
@@ -185,8 +208,9 @@ fun TemplateUpsertScreen(
                 }
             }
             else {
-                itemsIndexed(uiState.tempTemplateStatusList){ index,item ->
+                draggableItems(items = uiState.tempTemplateStatusList, dragDropState = dragDropState) { modifier, item ,index ->
                     StatusesItem(
+                        modifier = modifier,
                         index = index,
                         templateStatusEntity = item,
                         onMenuClick = {
@@ -194,6 +218,15 @@ fun TemplateUpsertScreen(
                             openBottomSheet = true
                         })
                 }
+                /*itemsIndexed(uiState.tempTemplateStatusList){ index,item ->
+                    StatusesItem(
+                        index = index,
+                        templateStatusEntity = item,
+                        onMenuClick = {
+                            tempTemplatesStatusEntity = it
+                            openBottomSheet = true
+                        })
+                }*/
             }
 
 
@@ -287,12 +320,13 @@ fun TemplateUpsertScreen(
 
 @Composable
 private fun StatusesItem(
+    modifier: Modifier = Modifier,
     index: Int,
     templateStatusEntity: TemplatesStatusEntity,
     onMenuClick: (TemplatesStatusEntity) -> Unit,
 ) {
     Box(
-        Modifier
+        modifier
             .fillMaxWidth()
             .padding(start = 23.dp, end = 23.dp, bottom = 5.dp, top = 5.dp)
             .border(
@@ -309,7 +343,7 @@ private fun StatusesItem(
                 .padding(vertical = 15.dp, horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AppIcon(AppIcons.DragIndicator, contentDescription = "", tint = Color.Gray)
+            AppIcon(AppIcons.DragIndicator, contentDescription = "", tint = Color.Gray,modifier = modifier)
             Spacer(Modifier.width(10.dp))
             Box(
                 Modifier
@@ -346,5 +380,5 @@ private fun StatusesItem(
 @Composable
 private fun TemplateUpsertScreenPreview() {
     var open = remember { mutableStateOf(true) }
-    TemplateUpsertScreen()
+    TemplateUpsertScreen(onCallBack = {})
 }

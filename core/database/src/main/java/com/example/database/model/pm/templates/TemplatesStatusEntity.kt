@@ -2,13 +2,25 @@ package com.example.database.model.pm.templates
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "templates_status")
+@Entity(
+    tableName = "templates_status",
+    foreignKeys = [
+        ForeignKey(
+            entity = TemplatesEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["template_id"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
+
 data class TemplatesStatusEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id:Int = 0,
-    @ColumnInfo(name = "order") val order:Int,
+    @ColumnInfo(name = "order") var order:Int,
 
     @ColumnInfo(name = "template_id") val templateId:Int = 0,
 

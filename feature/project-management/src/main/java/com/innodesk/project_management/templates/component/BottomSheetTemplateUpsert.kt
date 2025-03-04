@@ -10,7 +10,6 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,12 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.database.model.pm.templates.TemplateWithStatuses
 import com.example.database.model.pm.templates.TemplatesEntity
 import com.example.designsystem.component.AppBottomSheetDragHandle
 import com.example.designsystem.component.AppModalBottomSheet
 import com.innodesk.project_management.templates.TemplateUpsertScreen
-import com.innodesk.project_management.utils.TypeScreen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,6 +33,7 @@ fun BottomSheetTemplateUpsert(
     onCancelClick: () -> Unit,
     onDoneClick: () -> Unit,
     onDismissRequest: ()-> Unit,
+    onDeleteTemplate : ()->Unit
 ) {
     AppModalBottomSheet(
         isVisible = isVisible,
@@ -53,7 +51,7 @@ fun BottomSheetTemplateUpsert(
             )
         },
         content = {
-            TemplateUpsertScreen(templatesEntity = templatesEntity)
+            TemplateUpsertScreen(templatesEntity = templatesEntity, onCallBack = onDeleteTemplate)
         }
     )
 }
@@ -78,7 +76,7 @@ private fun BottomSheetTemplateUpsertPreview() {
                 initialValue = SheetValue.Expanded,
                 skipHiddenState = false
             ),*/
-            onCancelClick = {}, onDoneClick = {}, onDismissRequest = {open=false})
+            onCancelClick = {}, onDoneClick = {}, onDismissRequest = {open=false}, onDeleteTemplate = {})
     }
 
 }

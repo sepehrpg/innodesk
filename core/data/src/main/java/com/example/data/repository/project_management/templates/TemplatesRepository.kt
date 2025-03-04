@@ -27,5 +27,5 @@ interface TemplatesRepository {
 
     suspend fun insertTemplateWithStatuses(template: TemplatesEntity, statuses: List<TemplatesStatusEntity>)
 
-    fun templateWithStatusList(templateId: Int): Flow<TemplateWithStatuses>
+    fun templateWithStatusList(templateId: Int): Flow<TemplateWithStatuses?>
 }

@@ -37,7 +37,7 @@ data class ProjectUiState(
     val projectColor:String? = null,
 
     val templateName:String? = null,
-    val tempTemplateStatusList: List<TemplatesStatusEntity> = emptyList(),
+    var tempTemplateStatusList: List<TemplatesStatusEntity> = emptyList(),
 
     val templateStatusColor:String? = null,
     val templateStatusName:String? = null,
@@ -60,46 +60,73 @@ class ProjectsViewModel @Inject constructor(
     var templateWithStatusList: Flow<TemplateWithStatuses?> = flow { emit(null) }
 
 
+
+    // Get List
+    //..............................................................................................
     fun getTemplateWithStatus(templateId:Int){
         templateWithStatusList = templateOfflineRepository.templateWithStatusList(templateId).map { templateWithStatuses ->
-            templateWithStatuses.copy(
+            templateWithStatuses?.copy(
                 statuses = templateWithStatuses.statuses.sortedBy { it.order }
             )
         }
     }
+    //..............................................................................................
 
 
+
+
+   //Update Ui State
+    //..............................................................................................
     fun updateProjectName(name: String) {
         _uiState.update {
             it.copy(projectName = name)
         }
-    }
+       Timber.d(_uiState.value.projectName)
+   }
+
     fun updateTemplateName(name: String) {
         _uiState.update {
             it.copy(templateName = name)
         }
+        Timber.d(_uiState.value.templateName)
     }
+
     fun updateProjectAccessId(projectAccessValue: ProjectAccess) {
         Timber.d(projectAccessValue.toString())
         _uiState.update { it.copy(projectAccessValue = projectAccessValue) }
         Timber.d(_uiState.value.projectAccessValue.toString())
-
     }
+
     fun updateProjectColor(color: Color) {
         _uiState.update { it.copy(projectColor = color.toHexString()) }
+        Timber.d(_uiState.value.projectColor)
     }
-
 
     fun updateTemplateStatusName(name: String) {
         _uiState.update {
             it.copy(templateStatusName = name)
         }
+        Timber.d(_uiState.value.templateStatusName)
     }
 
     fun updateTemplateStatusColor(color: Color) {
         _uiState.update { it.copy(templateStatusColor = color.toHexString()) }
+        Timber.d(_uiState.value.templateStatusColor)
     }
+    //..............................................................................................
 
+
+    //Validation
+    private fun validationInsertProjectEntity():Boolean{
+
+        return true
+    }
+    //..............................................................................................
+
+
+
+    //Project Entity
+    //..............................................................................................
     fun updateProjectEntity(projectsEntity : ProjectsEntity){
         //if (!validationInsertProjectEntity()) return
 
@@ -115,15 +142,8 @@ class ProjectsViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO){
             projectOfflineRepository.updateProject(projectsUpdatedEntity)
-            clearData()
+            clearProject()
         }
-    }
-
-
-
-    private fun validationInsertProjectEntity():Boolean{
-
-        return true
     }
 
     fun insertProjectEntity(){
@@ -139,14 +159,75 @@ class ProjectsViewModel @Inject constructor(
 
         viewModelScope.launch{
             projectOfflineRepository.insertProject(projectsEntity)
-            clearData()
+            clearProject()
         }
     }
 
+    fun deleteProjectEntity(projectsEntity: ProjectsEntity?){
+        if (projectsEntity!=null){
+            viewModelScope.launch{
+                projectOfflineRepository.deleteProject(projectsEntity)
+            }
+        }
+        clearProject()
+    }
+    //..............................................................................................
+
+
+    // Template Entity
+    //..............................................................................................
+    fun insertTemplate(){
+
+        //if (!validationInsertProjectEntity()) return
+
+        //Set Order
+        _uiState.value.tempTemplateStatusList.mapIndexed { index, templatesStatusEntity ->
+            templatesStatusEntity.order = index
+        }
+        _uiState.value.tempTemplateStatusList.forEachIndexed { index, templatesStatusEntity ->
+            Timber.d("Index: $index , item:$templatesStatusEntity")
+        }
+
+        val template = TemplatesEntity(
+            name = _uiState.value.templateName?:"NULL"
+        )
+        Timber.d("template: $template ")
+        viewModelScope.launch {
+            templateOfflineRepository.insertTemplateWithStatuses(template,_uiState.value.tempTemplateStatusList)
+            clearTemplate()
+        }
+    }
+
+    fun deleteTemplate(selectedItem: TemplatesEntity?){
+        //if (!validationInsertProjectEntity()) return
+        selectedItem?.let {
+            viewModelScope.launch{
+                templateOfflineRepository.deleteTemplate(selectedItem)
+                clearTemplate()
+            }
+        }
+    }
+
+    fun updateTemplates(selectedItem : TemplatesEntity?){
+        selectedItem?.let {
+            val templateEntity =  selectedItem.copy(
+                name = _uiState.value.templateName?:""
+            )
+            selectedItem.let {
+                viewModelScope.launch{
+                    templateOfflineRepository.updateTemplate(templateEntity)
+                    clearTemplate()
+                }
+            }
+        }
+    }
+    //..............................................................................................
 
 
 
-    fun insertTemplateStatusEntityInTemplateUpdated(selectedItem: TemplatesEntity){
+    //Template Status Entity
+    //..............................................................................................
+    fun insertTemplateStatusEntity(selectedItem: TemplatesEntity){
         //if (!validationInsertProjectEntity()) return
 
         Timber.d(_uiState.value.templateStatusName)
@@ -162,22 +243,82 @@ class ProjectsViewModel @Inject constructor(
                     templateId = it.id
                 )
                 templateStatusOfflineRepository.insertTemplateStatus(templateStatusEntity)
-                clearData()
+                clearTemplateStatus()
             }
         }
     }
 
+    //Local List
+    fun insertTempTemplateStatus(){
 
+        //if (!validationInsertProjectEntity()) return
 
+        val maxOrder:Int = _uiState.value.tempTemplateStatusList.maxOfOrNull { it.order }?:0
+        val templateStatusEntity = TemplatesStatusEntity(
+            name = _uiState.value.templateStatusName?:"",
+            color = _uiState.value.templateStatusColor,
+            order = if(_uiState.value.tempTemplateStatusList.isNotEmpty()) maxOrder + 1 else 0
+            //order = _uiState.value.tempTemplateStatusList.size
+        )
+        _uiState.value = _uiState.value.copy(
+            tempTemplateStatusList = _uiState.value.tempTemplateStatusList + templateStatusEntity
+        )
+        //_uiState.value.tempTemplateStatusList.add(templateStatusEntity)
 
+        Timber.d(_uiState.value.tempTemplateStatusList.toString())
+        Timber.d(maxOrder.toString())
 
-    fun deleteProjectEntity(projectsEntity: ProjectsEntity?){
-        if (projectsEntity!=null){
-            viewModelScope.launch{
-                projectOfflineRepository.deleteProject(projectsEntity)
+        clearTemplateStatus()
+        //clearData(ProjectUiState(tempTemplateStatusList = _uiState.value.tempTemplateStatusList))
+    }
+
+    //Local List
+    fun updateTempTemplateStatus(updatedStatus: TemplatesStatusEntity) {
+
+        val item = TemplatesStatusEntity(
+            name = _uiState.value.templateStatusName?:updatedStatus.name,
+            color = _uiState.value.templateStatusColor?:updatedStatus.color,
+            order = updatedStatus.order
+        )
+
+        _uiState.value = _uiState.value.copy(
+            tempTemplateStatusList = _uiState.value.tempTemplateStatusList.map { status ->
+                if (status.order == item.order) item else status
             }
+        )
+
+        /*_uiState.value.tempTemplateStatusList.replaceAll {
+            status ->
+            if (status.order == item.order) item else status
+        }*/
+        /*_uiState.value.tempTemplateStatusList.map { status ->
+            if (status.order == item.order) item else status
+        }*/
+
+        Timber.d(item.toString())
+        Timber.d(updatedStatus.toString())
+        Timber.d(_uiState.value.tempTemplateStatusList.toString())
+
+        clearTemplateStatus()
+        //clearData(ProjectUiState(tempTemplateStatusList = _uiState.value.tempTemplateStatusList))
+    }
+
+    //Local List
+    fun deleteTempTemplateStatus(updatedStatus: TemplatesStatusEntity?){
+        updatedStatus?.let {
+            _uiState.value = _uiState.value.copy(
+                tempTemplateStatusList = _uiState.value.tempTemplateStatusList.filterNot { it.order == updatedStatus.order }
+            )
+            //_uiState.value.tempTemplateStatusList.filterNot { it.order == updatedStatus.order }
+            //_uiState.value.tempTemplateStatusList.removeIf { it.order == updatedStatus.order }
+            Timber.d(updatedStatus.toString())
+            Timber.d(updatedStatus.toString())
+            Timber.d(_uiState.value.tempTemplateStatusList.toString())
+            Timber.d(_uiState.value.tempTemplateStatusList.size.toString())
         }
-        clearData()
+
+        clearTemplateStatus()
+        //clearData(ProjectUiState(tempTemplateStatusList = _uiState.value.tempTemplateStatusList))
     }
 
     fun deleteTemplateStatusEntity(templateStatusEntity:TemplatesStatusEntity?){
@@ -186,10 +327,8 @@ class ProjectsViewModel @Inject constructor(
                 templateStatusOfflineRepository.deleteTemplateStatus(templateStatusEntity)
             }
         }
-        clearData()
+        clearTemplateStatus()
     }
-
-
 
     fun updateTemplateStatusEntity(templateStatusEntity:TemplatesStatusEntity?){
         //if (!validationInsertProjectEntity()) return
@@ -205,7 +344,7 @@ class ProjectsViewModel @Inject constructor(
 
             viewModelScope.launch(Dispatchers.IO){
                 templateStatusOfflineRepository.updateTemplateStatus(templateStatusUpdatedEntity)
-                clearData()
+                clearTemplateStatus()
             }
         }
 
@@ -215,87 +354,51 @@ class ProjectsViewModel @Inject constructor(
 
 
 
-    //..............................................................................................
-    fun insertTempTemplateStatus(){
 
-        //if (!validationInsertProjectEntity()) return
-
-        val maxOrder:Int = _uiState.value.tempTemplateStatusList.maxOfOrNull { it.order }?:0
-        val templateStatusEntity = TemplatesStatusEntity(
-            name = _uiState.value.templateStatusName?:"",
-            color = _uiState.value.templateStatusColor,
-            order = if(_uiState.value.tempTemplateStatusList.isNotEmpty()) maxOrder + 1 else 0
-            //order = _uiState.value.tempTemplateStatusList.size
-        )
-        _uiState.value = _uiState.value.copy(
-            tempTemplateStatusList = _uiState.value.tempTemplateStatusList + templateStatusEntity
-        )
-
-        Timber.d(_uiState.value.tempTemplateStatusList.toString())
-        Timber.d(maxOrder.toString())
-
-        clearData(ProjectUiState(tempTemplateStatusList = _uiState.value.tempTemplateStatusList))
-    }
-    fun updateTempTemplateStatus(updatedStatus: TemplatesStatusEntity) {
-
-        val item = TemplatesStatusEntity(
-            name = _uiState.value.templateStatusName?:updatedStatus.name,
-            color = _uiState.value.templateStatusColor?:updatedStatus.color,
-            order = updatedStatus.order
-        )
-
-        _uiState.value = _uiState.value.copy(
-            tempTemplateStatusList = _uiState.value.tempTemplateStatusList.map { status ->
-                if (status.order == item.order) item else status
-            }
-        )
-        Timber.d(item.toString())
-        Timber.d(updatedStatus.toString())
-        Timber.d(_uiState.value.tempTemplateStatusList.toString())
-
-        clearData(ProjectUiState(tempTemplateStatusList = _uiState.value.tempTemplateStatusList))
-    }
-
-    fun deleteTempTemplateStatus(updatedStatus: TemplatesStatusEntity?){
-        updatedStatus?.let {
-            _uiState.value = _uiState.value.copy(
-                tempTemplateStatusList = _uiState.value.tempTemplateStatusList.filterNot { it.order == updatedStatus.order }
-            )
-        }
-        Timber.d(updatedStatus.toString())
-        Timber.d(_uiState.value.tempTemplateStatusList.toString())
-
-        clearData(ProjectUiState(tempTemplateStatusList = _uiState.value.tempTemplateStatusList))
-    }
-
-    fun clearTempTemplateStatus(){
-        _uiState.value = _uiState.value.copy(
-            tempTemplateStatusList = emptyList()
-        )
-
-        clearData()
-    }
-    //..............................................................................................
-
-
-
-
+    //Clear Data
     //..............................................................................................
     private fun clearData(projectUiState: ProjectUiState = ProjectUiState()){
         _uiState.value = projectUiState
+        Timber.d("clearData")
     }
 
     fun clearTemplateStatus(){
-
+        _uiState.update {
+            it.copy(
+                templateStatusColor = null,
+                templateStatusName = null,
+            )
+        }
+        Timber.d("clearTemplateStatus")
+    }
+    fun clearUpsertTemplate(){
+        _uiState.update {
+            it.copy(
+                templateName = null,
+                tempTemplateStatusList = mutableListOf(),
+            )
+        }
+        clearTemplateStatus()
+        Timber.d("clearUpsertTemplate")
     }
     fun clearTemplate(){
+        //clear selected and searched for template
 
+        clearUpsertTemplate()
+        Timber.d("clearProject")
     }
     fun clearProject(){
-
+        clearData()
+        Timber.d("clearProject")
     }
     //..............................................................................................
 
 
+
+    fun onMove(toIndex:Int,fromIndex:Int){
+        _uiState.update { it.copy(
+            tempTemplateStatusList = _uiState.value.tempTemplateStatusList.toMutableList().apply { add(toIndex, removeAt(fromIndex)) }
+        ) }
+    }
 
 }

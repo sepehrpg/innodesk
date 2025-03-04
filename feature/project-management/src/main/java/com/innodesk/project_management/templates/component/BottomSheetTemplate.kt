@@ -54,7 +54,7 @@ fun BottomSheetTemplate(
         sheetState = sheetState,
         dragHandle = {
             AppBottomSheetDragHandle(
-                onDoneClick = {},
+                onDoneClick = onDoneClick,
                 onCancelClick = onCancelClick,
                 title = "Template",
                 done = "Done",

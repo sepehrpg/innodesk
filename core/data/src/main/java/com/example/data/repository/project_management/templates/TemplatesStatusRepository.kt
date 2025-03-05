@@ -13,6 +13,9 @@ interface TemplatesStatusRepository {
 
     suspend fun updateTemplateStatus(templateStatus: TemplatesStatusEntity)
 
+    suspend fun updateTemplateStatuses(templatesStatus: List<TemplatesStatusEntity>)
+
+
     suspend fun insertOrReplaceTemplateStatus(templateStatus: TemplatesStatusEntity)
 
     suspend fun deleteTemplateStatus(templateStatus: TemplatesStatusEntity)

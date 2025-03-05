@@ -21,6 +21,9 @@ interface TemplatesStatus {
     @Update
     suspend fun updateTemplateStatus(templatesStatus: TemplatesStatusEntity)
 
+    @Update
+    suspend fun updateTemplateStatuses(templatesStatus: List<TemplatesStatusEntity>)
+
     @Upsert
     suspend fun insertOrReplaceTemplateStatus(templatesStatus: TemplatesStatusEntity)
 
@@ -38,4 +41,9 @@ interface TemplatesStatus {
 
     @Query("SELECT MAX(`order`) FROM templates_status WHERE template_id=:templateId")
     fun getMaxOrder(templateId:Int): Flow<Int?>
+
+
+
+
+
 }

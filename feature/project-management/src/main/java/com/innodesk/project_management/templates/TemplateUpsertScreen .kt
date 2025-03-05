@@ -20,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -52,6 +53,7 @@ import com.example.designsystem.theme.ClickUpGray4
 import com.example.designsystem.theme.ClickUpPink1
 import com.innodesk.project_management.projects.ProjectsViewModel
 import com.innodesk.project_management.templates.component.BottomSheetTemplateStatus
+import timber.log.Timber
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,9 +63,18 @@ fun TemplateUpsertScreen(
     templatesEntity: TemplatesEntity? = null,
     onCallBack: () -> Unit,
 ) {
+
+
+    LaunchedEffect(templatesEntity){
+        templatesEntity?.let {
+            viewModel.updateTemplateName(it.name)
+        }
+    }
+
+
     var templatesStatusEntity:TemplatesStatusEntity? by remember { mutableStateOf(null) }
     var tempTemplatesStatusEntity:TemplatesStatusEntity? by remember { mutableStateOf(null) }
-    val templateWithStatusList by viewModel.templateWithStatusList.collectAsState(null)
+    //val templateWithStatusList by viewModel.templateWithStatusList.collectAsState(null)
     val uiState by viewModel.uiState.collectAsState()
 
     var openDeleteDialog by remember { mutableStateOf(false) }
@@ -94,10 +105,10 @@ fun TemplateUpsertScreen(
                     // BE IN DATABASE
                     if (templatesStatusEntity!=null){
                         // UPDATE
-                        viewModel.updateTemplateStatusEntity(templatesStatusEntity)
+                        viewModel.updateTemplateStatusEntity(templatesStatusEntity!!)
                     }
                     else{
-                        // INSERT
+                        // INSERT In Local list
                         viewModel.insertTemplateStatusEntity(templatesEntity)
                     }
                 }
@@ -146,6 +157,7 @@ fun TemplateUpsertScreen(
     val draggableItems by remember {
         derivedStateOf { uiState.tempTemplateStatusList.size }
     }
+
     val stateList = rememberLazyListState()
     val dragDropState =
         rememberDragDropState(
@@ -153,6 +165,7 @@ fun TemplateUpsertScreen(
             draggableItemsNum = draggableItems,
             onMove = { fromIndex, toIndex ->
                 viewModel.onMove(fromIndex,toIndex)
+                Timber.tag("FROMINDEXTOINDEX").d("F: $fromIndex -- T: $toIndex")
                 //uiState.tempTemplateStatusList = uiState.tempTemplateStatusList.toMutableList().apply { add(toIndex, removeAt(fromIndex))}
             })
 
@@ -195,7 +208,20 @@ fun TemplateUpsertScreen(
             }
 
             if (templatesEntity != null) {
-                templateWithStatusList?.let {
+
+                draggableItems(items = uiState.tempTemplateStatusList, dragDropState = dragDropState) { modifier, item ,index ->
+                    StatusesItem(
+                        modifier = modifier,
+                        index = index,
+                        templateStatusEntity = item,
+                        onMenuClick = {
+                            templatesStatusEntity = it
+                            openBottomSheet = true
+                        })
+                }
+
+
+                /*templateWithStatusList?.let {
                     itemsIndexed(it.statuses){ index,item ->
                         StatusesItem(
                             index = index,
@@ -205,7 +231,7 @@ fun TemplateUpsertScreen(
                             openBottomSheet = true
                         })
                     }
-                }
+                }*/
             }
             else {
                 draggableItems(items = uiState.tempTemplateStatusList, dragDropState = dragDropState) { modifier, item ,index ->

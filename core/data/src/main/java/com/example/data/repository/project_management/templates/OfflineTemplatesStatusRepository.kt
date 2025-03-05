@@ -36,6 +36,13 @@ class OfflineTemplatesStatusRepository @Inject constructor(
         }
     }
 
+    override suspend fun updateTemplateStatuses(templatesStatus: List<TemplatesStatusEntity>) {
+        withContext(ioDispatcher){
+            projectManagementDao.updateTemplateStatuses(templatesStatus)
+        }
+    }
+
+
     override suspend fun insertOrReplaceTemplateStatus(templateStatus: TemplatesStatusEntity) {
         withContext(ioDispatcher){
             projectManagementDao.insertOrReplaceTemplateStatus(templateStatus)

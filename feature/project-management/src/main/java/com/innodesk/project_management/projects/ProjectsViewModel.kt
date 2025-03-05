@@ -20,8 +20,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -57,17 +57,45 @@ class ProjectsViewModel @Inject constructor(
 
     val projectsList: Flow<List<ProjectsEntity>> = projectOfflineRepository.projectsList()
     val templateList: Flow<List<TemplatesEntity>> = templateOfflineRepository.templateList()
-    var templateWithStatusList: Flow<TemplateWithStatuses?> = flow { emit(null) }
-
+    //var templateWithStatusList: Flow<TemplateWithStatuses?> = flow { emit(null) }
 
 
     // Get List
     //..............................................................................................
+    private var isDataLoaded = false
     fun getTemplateWithStatus(templateId:Int){
-        templateWithStatusList = templateOfflineRepository.templateWithStatusList(templateId).map { templateWithStatuses ->
+
+        /*templateWithStatusList = templateOfflineRepository.templateWithStatusList(templateId).map { templateWithStatuses ->
             templateWithStatuses?.copy(
                 statuses = templateWithStatuses.statuses.sortedBy { it.order }
             )
+        }*/
+
+        viewModelScope.launch {
+            templateOfflineRepository.templateWithStatusList(templateId).collect { data ->
+                if (data?.statuses != null){
+                    _uiState.value = _uiState.value.copy(
+                        tempTemplateStatusList = data.statuses.sortedBy { it.order }
+                    )
+                }
+            }
+
+            /*val dbList = templateOfflineRepository.templateWithStatusList(templateId).firstOrNull()?.statuses?.sortedBy { it.order }
+            if(dbList!=null){
+                _uiState.value = _uiState.value.copy(
+                    tempTemplateStatusList = dbList
+                )
+            }*/
+
+            /*templateOfflineRepository.templateWithStatusList(templateId).collect { data ->
+                if (!isDataLoaded && data?.statuses != null) {
+                    _uiState.value = _uiState.value.copy(
+                        tempTemplateStatusList = data.statuses.sortedBy { it.order }
+                    )
+                    isDataLoaded = true
+                }
+            }*/
+
         }
     }
     //..............................................................................................
@@ -97,8 +125,8 @@ class ProjectsViewModel @Inject constructor(
         Timber.d(_uiState.value.projectAccessValue.toString())
     }
 
-    fun updateProjectColor(color: Color) {
-        _uiState.update { it.copy(projectColor = color.toHexString()) }
+    fun updateProjectColor(color: Color?) {
+        _uiState.update { it.copy(projectColor = color?.toHexString()) }
         Timber.d(_uiState.value.projectColor)
     }
 
@@ -208,21 +236,39 @@ class ProjectsViewModel @Inject constructor(
         }
     }
 
-    fun updateTemplates(selectedItem : TemplatesEntity?){
+    fun updateTemplatesWithStatusList(selectedItem : TemplatesEntity?){
+
+        _uiState.value.tempTemplateStatusList.mapIndexed { index, templatesStatusEntity ->
+            templatesStatusEntity.order = index
+        }
+        _uiState.value.tempTemplateStatusList.forEachIndexed { index, templatesStatusEntity ->
+            Timber.d("Index: $index , item:$templatesStatusEntity")
+        }
+
         selectedItem?.let {
             val templateEntity =  selectedItem.copy(
                 name = _uiState.value.templateName?:""
             )
-            selectedItem.let {
-                viewModelScope.launch{
-                    templateOfflineRepository.updateTemplate(templateEntity)
-                    clearTemplate()
+            viewModelScope.launch{
+                _uiState.value.tempTemplateStatusList.forEach {
+                    if (it.id!=0){
+                        templateStatusOfflineRepository.updateTemplateStatus(it)
+                    }
+                    else{
+                        templateStatusOfflineRepository.insertTemplateStatus(it.copy(
+                            templateId = selectedItem.id
+                        ))
+                    }
                 }
+                Timber.d(_uiState.value.tempTemplateStatusList.toString())
+                templateOfflineRepository.updateTemplate(templateEntity)
+
+                //templateOfflineRepository.updateTemplateWithStatuses(templateEntity,_uiState.value.tempTemplateStatusList)
+                clearTemplate()
             }
         }
     }
     //..............................................................................................
-
 
 
     //Template Status Entity
@@ -306,6 +352,7 @@ class ProjectsViewModel @Inject constructor(
     //Local List
     fun deleteTempTemplateStatus(updatedStatus: TemplatesStatusEntity?){
         updatedStatus?.let {
+
             _uiState.value = _uiState.value.copy(
                 tempTemplateStatusList = _uiState.value.tempTemplateStatusList.filterNot { it.order == updatedStatus.order }
             )
@@ -322,6 +369,7 @@ class ProjectsViewModel @Inject constructor(
     }
 
     fun deleteTemplateStatusEntity(templateStatusEntity:TemplatesStatusEntity?){
+        deleteTempTemplateStatus(templateStatusEntity)
         templateStatusEntity?.let {
             viewModelScope.launch{
                 templateStatusOfflineRepository.deleteTemplateStatus(templateStatusEntity)
@@ -337,10 +385,12 @@ class ProjectsViewModel @Inject constructor(
         Timber.d(_uiState.value.templateStatusColor)
 
         templateStatusEntity?.let {
+
             val templateStatusUpdatedEntity = it.copy(
                 name = _uiState.value.templateStatusName?:it.name,
                 color = _uiState.value.templateStatusColor?:it.color
             )
+            updateTempTemplateStatus(templateStatusUpdatedEntity)
 
             viewModelScope.launch(Dispatchers.IO){
                 templateStatusOfflineRepository.updateTemplateStatus(templateStatusUpdatedEntity)
@@ -378,6 +428,7 @@ class ProjectsViewModel @Inject constructor(
                 tempTemplateStatusList = mutableListOf(),
             )
         }
+        isDataLoaded = false
         clearTemplateStatus()
         Timber.d("clearUpsertTemplate")
     }

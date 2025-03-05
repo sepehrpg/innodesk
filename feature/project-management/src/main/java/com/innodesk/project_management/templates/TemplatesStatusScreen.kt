@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.database.model.pm.templates.TemplatesStatusEntity
 import com.example.designsystem.component.AppColorPickerLibrary1
 import com.example.designsystem.component.AppDeleteDialog
@@ -52,6 +54,14 @@ fun TemplateStatusScreen(
     onChangeTemplateStatusColor : (Color) -> Unit,
     onDelete : (TemplatesStatusEntity) -> Unit,
 ) {
+
+    LaunchedEffect(templatesStatusEntity){
+        templatesStatusEntity?.let {
+            onChangeTemplateStatusName(templatesStatusEntity.name?:"")
+            onChangeTemplateStatusColor(Color.hexStringToColor(templatesStatusEntity.color)?:Color.Gray)
+        }
+    }
+
     var showDialog by remember { mutableStateOf(false) }
     var openDeleteDialog by remember { mutableStateOf(false) }
 

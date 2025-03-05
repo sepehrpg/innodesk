@@ -1,5 +1,6 @@
 package com.example.database.dao.project_management
 
+import androidx.room.ColumnInfo
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -11,6 +12,7 @@ import com.example.database.model.pm.templates.TemplateWithStatuses
 import com.example.database.model.pm.templates.TemplatesEntity
 import com.example.database.model.pm.templates.TemplatesStatusEntity
 import kotlinx.coroutines.flow.Flow
+import timber.log.Timber
 
 
 interface Templates {
@@ -37,15 +39,17 @@ interface Templates {
     fun countTemplates(): Flow<Int>
 
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTemplateTransaction(templates: TemplatesEntity) : Long
+    suspend fun insertTemplateTransaction(templates: TemplatesEntity): Long
 
 
     @Transaction
-    suspend fun insertTemplateWithStatuses(template: TemplatesEntity, statuses: List<TemplatesStatusEntity>) {
+    suspend fun insertTemplateWithStatuses(
+        template: TemplatesEntity,
+        statuses: List<TemplatesStatusEntity>
+    ) {
         // First insert the template
-         val templateId = insertTemplateTransaction(template)
+        val templateId = insertTemplateTransaction(template)
 
         // Then update the statuses with the correct templateId
         val updatedStatuses = statuses.map { it.copy(templateId = templateId.toInt()) }
@@ -53,6 +57,7 @@ interface Templates {
         // Insert the statuses
         insertTemplatesStatusTransaction(updatedStatuses)
     }
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTemplatesStatusTransaction(templatesStatus: List<TemplatesStatusEntity>)
@@ -63,4 +68,19 @@ interface Templates {
     @Query("SELECT * FROM templates WHERE id = :templateId")
     fun templateWithStatusList(templateId: Int): Flow<TemplateWithStatuses?>?
 
+
+    @Update
+    suspend fun updateTemplateTransaction(templates: TemplatesEntity)
+
+    @Transaction
+    suspend fun updateTemplateWithStatuses(
+        template: TemplatesEntity,
+        statuses: List<TemplatesStatusEntity>
+    ) {
+        // update the template
+        updateTemplateTransaction(template)
+
+    }
 }
+
+

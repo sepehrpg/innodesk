@@ -81,6 +81,16 @@ class OfflineTemplatesRepository @Inject constructor(
         }
     }
 
+    override suspend fun updateTemplateWithStatuses(
+        template: TemplatesEntity,
+        statuses: List<TemplatesStatusEntity>
+    ) {
+        withContext(ioDispatcher){
+            Timber.d("Call : updateTemplateWithStatuses")
+            projectManagementDao.updateTemplateWithStatuses(template,statuses)
+        }
+    }
+
     override fun templateWithStatusList(templateId: Int): Flow<TemplateWithStatuses?> {
         return projectManagementDao.templateWithStatusList(templateId)
             ?.catch {

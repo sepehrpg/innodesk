@@ -21,6 +21,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,6 +67,14 @@ fun ProjectUpsertScreen(
     projectsEntity: ProjectsEntity?,
     onDeleteProject: (ProjectsEntity?) -> Unit,
 ) {
+
+    LaunchedEffect(projectsEntity){
+        projectsEntity?.let {
+            viewModel.updateProjectName(it.name)
+            viewModel.updateProjectAccessId(it.projectAccess)
+            viewModel.updateProjectColor(Color.hexStringToColor(it.color))
+        }
+    }
 
     var projectName: String by remember { mutableStateOf(projectsEntity?.name ?: "") }
     var tempSelected by remember {

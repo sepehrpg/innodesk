@@ -12,12 +12,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,8 +38,6 @@ import com.example.designsystem.theme.ClickUpGray4
 import com.example.designsystem.theme.PrimaryColor
 import com.innodesk.project_management.projects.ProjectsViewModel
 import com.innodesk.project_management.templates.component.BottomSheetTemplateUpsert
-import com.innodesk.project_management.utils.TypeScreen
-import timber.log.Timber
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,7 +67,7 @@ fun TemplatesScreen(
             onDoneClick = {
                 if(templatesEntity!=null){
                     // In Database
-                    viewModel.updateTemplates(templatesEntity)
+                    viewModel.updateTemplatesWithStatusList(templatesEntity)
                 }
                 else{
                     //Not In Database

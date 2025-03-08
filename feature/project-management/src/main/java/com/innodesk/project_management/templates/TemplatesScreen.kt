@@ -46,7 +46,13 @@ fun TemplatesScreen(
     viewModel: ProjectsViewModel = hiltViewModel()
 ) {
 
-    val templateList by viewModel.templateList.collectAsState(initial = emptyList())
+    val defTemplateList by viewModel.templateList.collectAsState(initial = emptyList())
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val templateList = if (searchQuery.isBlank()) {
+        defTemplateList
+    } else {
+        defTemplateList.filter { it.name.contains(searchQuery, ignoreCase = true) }
+    }
 
     var templatesEntity:TemplatesEntity? by remember { mutableStateOf<TemplatesEntity?>(null) }
     var openBottomSheet by remember { mutableStateOf(false) }
@@ -62,19 +68,25 @@ fun TemplatesScreen(
             },
             onDeleteTemplate = {
                 viewModel.deleteTemplate(templatesEntity)
+                viewModel.clearUpsertTemplate()
+                templatesEntity = null
                 openBottomSheet = false
             },
             onDoneClick = {
-                if(templatesEntity!=null){
+                val validationPass = if(templatesEntity!=null){
                     // In Database
                     viewModel.updateTemplatesWithStatusList(templatesEntity)
                 }
                 else{
                     //Not In Database
-                    viewModel.insertTemplate()
+                    viewModel.insertTemplateWithStatuses()
                 }
-                templatesEntity = null
-                openBottomSheet = false
+
+                if(validationPass){
+                    templatesEntity = null
+                    openBottomSheet = false
+                    viewModel.clearUpsertTemplate()
+                }
             },
             onDismissRequest = {
                 templatesEntity = null
@@ -90,7 +102,6 @@ fun TemplatesScreen(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-
             item {
                 Column {
                     Row(
@@ -103,6 +114,7 @@ fun TemplatesScreen(
                         AppText("Template", fontSize = 14.sp, color = Color.Gray)
                         Box(contentAlignment = Alignment.CenterEnd) {
                             AppIconButton(onClick = {
+                                viewModel.clearUpsertTemplate()
                                 openBottomSheet = true
                             }) {
                                 AppIcon(AppIcons.Add, tint = Color.Gray, contentDescription = "")
@@ -122,10 +134,12 @@ fun TemplatesScreen(
                     selected = templatesEntity == item,
                     onItemSelected = {
                         templatesEntity = it
+                        viewModel.updateTemplateId(it.id)
                     },
                     onMenuClick = {
                         templatesEntity = it
                         openBottomSheet = true
+                        viewModel.isDataLoaded = false
                         viewModel.getTemplateWithStatus(item.id)
                     }
                 )

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.designsystem.config.direction.AppDirection
 import com.example.designsystem.config.direction.LayoutDirections
+import com.example.designsystem.extension.clickableWithNoRipple
 import com.example.designsystem.theme.ClickUpGray1
 import com.example.designsystem.theme.ClickUpWhiteBackground
 import com.example.designsystem.theme.PrimaryColor
@@ -261,7 +263,7 @@ fun AppCustomSearchBarBasicTextField(
                     AppIcon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search Icon",
-                        tint = Color.DarkGray
+                        tint = Color.DarkGray,
                     )
                     Spacer(Modifier.width(7.dp))
                     Box(modifier = Modifier
@@ -507,7 +509,7 @@ fun AppOutlineTextFieldStatic1(
     onValueChange: (String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
-
+    val keyboardController = LocalSoftwareKeyboardController.current
     AppOutlineTextField(
         value = value,
         onValueChange = onValueChange,
@@ -521,7 +523,10 @@ fun AppOutlineTextFieldStatic1(
             focusedBorderColor = PrimaryColor.copy(alpha = 0.5f)
         ),
         keyboardActions = KeyboardActions(
-            onDone = { focusManager.clearFocus(true) }
+            onDone = {
+                focusManager.clearFocus(true)
+                keyboardController?.hide()
+            }
         ),
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = ImeAction.Done,

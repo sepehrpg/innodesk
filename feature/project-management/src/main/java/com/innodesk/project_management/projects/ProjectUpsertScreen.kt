@@ -22,9 +22,11 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +50,8 @@ import com.example.designsystem.component.AppFilledIconButton
 import com.example.designsystem.component.AppIcon
 import com.example.designsystem.component.AppOutlineTextFieldStatic1
 import com.example.designsystem.component.AppText
+import com.example.designsystem.component.SnackBarManager
+import com.example.designsystem.component.SnackBarType
 import com.example.designsystem.extension.clickableWithNoRipple
 import com.example.designsystem.extension.hexStringToColor
 import com.example.designsystem.icon.AppIcons
@@ -58,6 +62,7 @@ import com.example.designsystem.theme.PrimaryColor
 import com.innodesk.project_management.templates.TemplateUpsertScreen
 import com.innodesk.project_management.templates.component.BottomSheetTemplate
 import com.innodesk.project_management.utils.TypeScreen
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,6 +72,9 @@ fun ProjectUpsertScreen(
     projectsEntity: ProjectsEntity?,
     onDeleteProject: (ProjectsEntity?) -> Unit,
 ) {
+
+    val uiState by viewModel.uiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(projectsEntity){
         projectsEntity?.let {
@@ -118,6 +126,7 @@ fun ProjectUpsertScreen(
                 openBottomSheet = false
             },
             onDoneClick = {
+                openBottomSheet = false
             },
             onDismissRequest = {
                 openBottomSheet = false
@@ -201,6 +210,11 @@ fun ProjectUpsertScreen(
                             //list[it].isSelected()
                             tempSelected = ProjectAccess.entries[it]
                             viewModel.updateProjectAccessId(ProjectAccess.entries[it])
+                        },
+                        sharedClick = {
+                            coroutineScope.launch {
+                                SnackBarManager.showSnackBar("This Feature Adding Soon")
+                            }
                         }
                     )
                 }
@@ -253,7 +267,11 @@ fun ProjectUpsertScreen(
                                 Spacer(Modifier.width(10.dp))
                                 AppText("Templates", fontSize = 13.sp)
                             }
-                            AppIcon(AppIcons.ArrowRight, contentDescription = "", tint = Color.Gray)
+                            AppIcon(
+                                if(uiState.templateId!=null) AppIcons.Done else AppIcons.ArrowRight,
+                                contentDescription = "",
+                                tint = if(uiState.templateId!=null) Color(0xFF003919) else Color.Gray
+                            )
                         }
                         HorizontalDivider(color = Color((0xFFEEEEEE)))
                     }

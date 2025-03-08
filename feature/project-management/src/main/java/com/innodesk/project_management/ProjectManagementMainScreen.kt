@@ -3,6 +3,7 @@ package com.innodesk.project_management
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +57,8 @@ import com.example.designsystem.component.AppIcon
 import com.example.designsystem.component.AppTabPager
 import com.example.designsystem.component.AppTabPagerItems
 import com.example.designsystem.component.AppText
+import com.example.designsystem.component.SnackBarManager
+import com.example.designsystem.component.SnackBarType
 import com.example.designsystem.theme.AppTheme
 import com.example.designsystem.theme.GradientColor1
 import com.example.designsystem.theme.GradientColor2
@@ -69,6 +73,7 @@ import com.innodesk.project_management.projects.ProjectsScreen
 import com.innodesk.project_management.templates.TemplateStatusScreen
 import com.innodesk.project_management.templates.TemplatesScreen
 import com.innodesk.project_management.templates.TemplateUpsertScreen
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -205,6 +210,7 @@ private fun Body(
 ) {
     val context = LocalContext.current
     var pageIndex by remember { mutableStateOf(0) }
+    val coroutineScope = rememberCoroutineScope()
 
     Box(Modifier.padding(top = 2.dp)) {
         val mod: Modifier = Modifier

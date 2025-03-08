@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.designsystem.extension.clickableWithNoRipple
 import com.example.designsystem.icon.AppIcons
 import com.example.designsystem.theme.ClickUpGray2
 import com.example.designsystem.theme.ClickUpGray3
@@ -456,6 +457,7 @@ data class AppCustomLeadingIconTabItem(
 fun AppCustomLeadingIconTab(
     item:List<AppCustomLeadingIconTabItem>,
     onClick: (index:Int) -> Unit,
+    sharedClick: () -> Unit,
     modifier: Modifier = Modifier,
     boxModifier: Modifier = Modifier.fillMaxWidth()
         .shadow(0.dp, RoundedCornerShape(0.dp)).clip(RoundedCornerShape(10.dp)).background(ClickUpGray2),
@@ -498,7 +500,9 @@ fun AppCustomLeadingIconTab(
 
                     if(item[selected!!].additionalUi){
                         Spacer(Modifier.height(10.dp))
-                        Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 5.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+                        Row(Modifier.fillMaxWidth().clickableWithNoRipple {
+                            sharedClick()
+                        }.padding(horizontal = 14.dp, vertical = 5.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
                             AppText("Share With", color = Color.DarkGray, fontSize = 13.sp)
                             AppIcon(AppIcons.ArrowRight, contentDescription = "", tint = Color.Gray)
                         }
@@ -536,6 +540,9 @@ fun AppCustomLeadingIconTabPreview(){
             selectedContentColor = GradientColor1.bottom,
             unselectedContentColor = Color.Gray,
             onClick = {
+
+            },
+            sharedClick = {
 
             }
         )

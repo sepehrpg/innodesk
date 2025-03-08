@@ -52,6 +52,8 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", project(":core:designsystem"))
                 add("implementation", project(":core:common"))
                 add("implementation", project(":core:data"))
+                add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
+
                 //add("implementation", project(":core:ui"))
 
                 //add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())

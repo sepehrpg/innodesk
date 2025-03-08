@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.project.android.application.compose) //compose application
     alias(libs.plugins.project.android.lint) // lint
     alias(libs.plugins.project.compose.component) // all jetpack compose component
+    alias(libs.plugins.project.android.hilt) // hilt
 }
 
 android {
@@ -35,9 +36,26 @@ dependencies {
 
 
     /** Add Module */
+    /** Add Module */
     implementation(project(":core:designsystem"))
+    implementation(project(":feature:project-management"))
+    implementation(project(":core:data"))
+
+
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.9")
+
+
     implementation(libs.material) //ex:androidx.activity.ComponentActivity
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
+
+
+    implementation(libs.androidx.adaptive)
+    implementation (libs.androidx.adaptive.layout)
+    implementation (libs.androidx.adaptive.navigation)
+    implementation(libs.kotlinx.datetime)
+
+
     //implementation(libs.androidx.core.ktx)
     //implementation(libs.androidx.appcompat)
     //testImplementation(libs.junit)

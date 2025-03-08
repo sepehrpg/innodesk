@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +28,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.designsystem.component.AppBottomSheetDragHandle
 import com.example.designsystem.component.AppCustomSearchBarBasicTextField
 import com.example.designsystem.component.AppModalBottomSheet
 import com.example.designsystem.theme.ClickUpWhiteBackground2
+import com.innodesk.project_management.projects.ProjectsViewModel
 import com.innodesk.project_management.templates.TemplatesScreen
 
 
@@ -39,12 +42,17 @@ import com.innodesk.project_management.templates.TemplatesScreen
 fun BottomSheetTemplate(
     isVisible: Boolean,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    viewModel: ProjectsViewModel = hiltViewModel(),
     onCancelClick: () -> Unit,
     onDoneClick: () -> Unit,
     onDismissRequest: ()-> Unit,
 ) {
 
     var search by remember { mutableStateOf("") }
+
+    LaunchedEffect(search) {
+        viewModel.updateSearchQuery(search)
+    }
 
     AppModalBottomSheet(
         isVisible = isVisible,
@@ -71,12 +79,15 @@ fun BottomSheetTemplate(
                                 .padding(horizontal = 20.dp)) {
                             AppCustomSearchBarBasicTextField(
                                 value = search,
-                                onValueChange = {},
+                                onValueChange = {
+                                    search = it
+                                },
                                 brush = Brush.horizontalGradient(
                                     listOf(
                                         ClickUpWhiteBackground2, ClickUpWhiteBackground2
                                     )
                                 ),
+                                clearTextField = { search = "" },
                                 shadowValue = 0.dp,
                                 shape = RoundedCornerShape(10.dp)
                             )

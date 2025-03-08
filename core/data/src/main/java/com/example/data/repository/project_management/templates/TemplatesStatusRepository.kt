@@ -19,6 +19,7 @@ interface TemplatesStatusRepository {
     suspend fun insertOrReplaceTemplateStatus(templateStatus: TemplatesStatusEntity)
 
     suspend fun deleteTemplateStatus(templateStatus: TemplatesStatusEntity)
+    suspend fun deleteTemplateStatusWithTemplateId(templateId: Int)
 
     fun templateStatusList(): Flow<List<TemplatesStatusEntity>>
 

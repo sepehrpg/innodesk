@@ -16,7 +16,6 @@ import androidx.room.PrimaryKey
         )
     ]
 )
-
 data class TemplatesStatusEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id:Int = 0,

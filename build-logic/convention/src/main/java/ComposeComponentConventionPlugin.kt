@@ -34,6 +34,10 @@ class ComposeComponentConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.compose.ui.test").get())
                 add("implementation", libs.findLibrary("androidx.compose.ui.testManifest").get())
                 add("implementation", libs.findLibrary("androidx.compose.ui.ui.test.junit4").get())
+
+                /*implementation(libs.androidx.adaptive)
+                implementation (libs.androidx.adaptive.layout)
+                implementation (libs.androidx.adaptive.navigation)*/
             }
         }
     }

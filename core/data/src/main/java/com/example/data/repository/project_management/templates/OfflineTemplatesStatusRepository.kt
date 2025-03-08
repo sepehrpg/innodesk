@@ -3,7 +3,6 @@ package com.example.data.repository.project_management.templates
 import com.example.data.di.AppDispatcher
 import com.example.data.di.Dispatcher
 import com.example.database.dao.ProjectManagementDao
-import com.example.database.model.pm.templates.TemplatesEntity
 import com.example.database.model.pm.templates.TemplatesStatusEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -52,6 +51,12 @@ class OfflineTemplatesStatusRepository @Inject constructor(
     override suspend fun deleteTemplateStatus(templateStatus: TemplatesStatusEntity) {
         withContext(ioDispatcher){
             projectManagementDao.deleteTemplateStatus(templateStatus)
+        }
+    }
+
+    override suspend fun deleteTemplateStatusWithTemplateId(templateId: Int) {
+        withContext(ioDispatcher){
+            projectManagementDao.deleteTemplateStatusWithTemplateId(templateId)
         }
     }
 

@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface TemplatesStatus {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insertTemplateStatus(templatesStatus: TemplatesStatusEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insertTemplatesStatus(templatesStatus: List<TemplatesStatusEntity>)
 
     @Update
@@ -33,6 +33,9 @@ interface TemplatesStatus {
     @Delete
     fun deleteTemplateStatus(templatesStatus: TemplatesStatusEntity)
 
+    @Query("DELETE FROM templates_status WHERE template_id = :templateId")
+    suspend fun deleteTemplateStatusWithTemplateId(templateId: Int)
+
     @Query("SELECT count(*) FROM templates_status")
     fun countTemplatesStatus(): Flow<Int>
 
@@ -41,9 +44,5 @@ interface TemplatesStatus {
 
     @Query("SELECT MAX(`order`) FROM templates_status WHERE template_id=:templateId")
     fun getMaxOrder(templateId:Int): Flow<Int?>
-
-
-
-
 
 }

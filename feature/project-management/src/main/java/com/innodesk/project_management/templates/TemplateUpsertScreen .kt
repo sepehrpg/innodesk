@@ -72,7 +72,7 @@ fun TemplateUpsertScreen(
     }
 
 
-    var templatesStatusEntity:TemplatesStatusEntity? by remember { mutableStateOf(null) }
+    //var templatesStatusEntity:TemplatesStatusEntity? by remember { mutableStateOf(null) }
     var tempTemplatesStatusEntity:TemplatesStatusEntity? by remember { mutableStateOf(null) }
     //val templateWithStatusList by viewModel.templateWithStatusList.collectAsState(null)
     val uiState by viewModel.uiState.collectAsState()
@@ -93,57 +93,34 @@ fun TemplateUpsertScreen(
     if (openBottomSheet) {
         BottomSheetTemplateStatus(
             isVisible = openBottomSheet,
-            templatesStatusEntity = templatesStatusEntity?:tempTemplatesStatusEntity,
+            templatesStatusEntity = tempTemplatesStatusEntity,
             onCancelClick = {
-                templatesStatusEntity = null
                 tempTemplatesStatusEntity = null
                 openBottomSheet = false
 
             },
             onDoneClick = {
-                if (templatesEntity!=null){
-                    // BE IN DATABASE
-                    if (templatesStatusEntity!=null){
-                        // UPDATE
-                        viewModel.updateTemplateStatusEntity(templatesStatusEntity!!)
-                    }
-                    else{
-                        // INSERT In Local list
-                        viewModel.insertTemplateStatusEntity(templatesEntity)
-                    }
+
+                val validationPass = if (tempTemplatesStatusEntity!=null){
+                    // UPDATE
+                    viewModel.updateTempTemplateStatus(tempTemplatesStatusEntity!!)
                 }
                 else{
-                    // NOT BE IN DATABASE
-                    if (tempTemplatesStatusEntity!=null){
-                        // UPDATE
-                        viewModel.updateTempTemplateStatus(tempTemplatesStatusEntity!!)
-                    }
-                    else{
-                        // INSERT
-                        viewModel.insertTempTemplateStatus()
-                    }
+                    // INSERT
+                    viewModel.insertTempTemplateStatus()
                 }
-                openBottomSheet = false
-                templatesStatusEntity = null
-                tempTemplatesStatusEntity = null
+                if (validationPass){
+                    openBottomSheet = false
+                    tempTemplatesStatusEntity = null
+                }
             },
             onDismissRequest = {
-                templatesStatusEntity = null
                 tempTemplatesStatusEntity = null
                 openBottomSheet = false
             },
             onDelete = {
-                if (templatesEntity!=null){
-                    // BE IN DATABASE
-                    viewModel.deleteTemplateStatusEntity(templatesStatusEntity)
-                }
-                else
-                {
-                    // NOT BE IN DATABASE
-                    viewModel.deleteTempTemplateStatus(tempTemplatesStatusEntity)
-                }
+                viewModel.deleteTempTemplateStatus(tempTemplatesStatusEntity)
 
-                templatesStatusEntity = null
                 tempTemplatesStatusEntity = null
                 openBottomSheet = false
             },
@@ -215,7 +192,7 @@ fun TemplateUpsertScreen(
                         index = index,
                         templateStatusEntity = item,
                         onMenuClick = {
-                            templatesStatusEntity = it
+                            tempTemplatesStatusEntity = it
                             openBottomSheet = true
                         })
                 }

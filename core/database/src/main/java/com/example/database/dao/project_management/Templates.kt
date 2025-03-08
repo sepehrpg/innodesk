@@ -1,6 +1,5 @@
 package com.example.database.dao.project_management
 
-import androidx.room.ColumnInfo
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -12,7 +11,6 @@ import com.example.database.model.pm.templates.TemplateWithStatuses
 import com.example.database.model.pm.templates.TemplatesEntity
 import com.example.database.model.pm.templates.TemplatesStatusEntity
 import kotlinx.coroutines.flow.Flow
-import timber.log.Timber
 
 
 interface Templates {
@@ -39,9 +37,8 @@ interface Templates {
     fun countTemplates(): Flow<Int>
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insertTemplateTransaction(templates: TemplatesEntity): Long
-
 
     @Transaction
     suspend fun insertTemplateWithStatuses(
@@ -51,16 +48,21 @@ interface Templates {
         // First insert the template
         val templateId = insertTemplateTransaction(template)
 
+        //deleteTemplateStatus(templateId.toInt())
+
         // Then update the statuses with the correct templateId
         val updatedStatuses = statuses.map { it.copy(templateId = templateId.toInt()) }
 
         // Insert the statuses
         insertTemplatesStatusTransaction(updatedStatuses)
     }
-
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTemplatesStatusTransaction(templatesStatus: List<TemplatesStatusEntity>)
+
+    @Query("DELETE FROM templates_status WHERE template_id = :templateId")
+    suspend fun deleteTemplateStatus(templateId: Int)
+
+
 
 
     // Fetch template with its statuses
@@ -77,8 +79,17 @@ interface Templates {
         template: TemplatesEntity,
         statuses: List<TemplatesStatusEntity>
     ) {
-        // update the template
+
+        // First update the template
         updateTemplateTransaction(template)
+
+        deleteTemplateStatus(template.id)
+
+        // Then update the statuses with the correct templateId
+        val updatedStatuses = statuses.map { it.copy(templateId = template.id) }
+
+        // Insert the statuses
+        insertTemplatesStatusTransaction(updatedStatuses)
 
     }
 }

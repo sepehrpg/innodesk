@@ -15,6 +15,7 @@
  */
 import com.android.build.gradle.LibraryExtension
 import com.example.convention.configureKotlinAndroid
+import com.example.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -44,7 +45,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             dependencies {
                 add("testImplementation", kotlin("test"))
+                add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
             }
+
         }
     }
 }

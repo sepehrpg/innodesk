@@ -1,5 +1,8 @@
 package com.innodesk.project_management.projects
 
+import android.app.Activity
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -53,6 +56,7 @@ fun ProjectsScreen(
         projects = projects,
         openBottomSheet = {
             isVisibleBottomSheet = true
+            viewModel.clearData()
         },
         onClickProjectEdit = {
             selectedProject = it
@@ -67,15 +71,15 @@ fun ProjectsScreen(
             isVisibleBottomSheet = false
         },
         onDoneClick = {
-            if (selectedProject!=null){
+            val validationPassed = if (selectedProject != null) {
                 viewModel.updateProjectEntity(selectedProject!!)
-            }
-            else{
+            } else {
                 viewModel.insertProjectEntity()
             }
-            selectedProject = null
-            isVisibleBottomSheet = false
-
+            if (validationPassed) {
+                selectedProject = null
+                isVisibleBottomSheet = false
+            }
         },
         projectsEntity = selectedProject,
         onDeleteProject = {
@@ -86,6 +90,7 @@ fun ProjectsScreen(
     )
 
 }
+
 
 
 @Composable

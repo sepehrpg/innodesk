@@ -3,7 +3,7 @@ package com.innodesk.demo.database
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.di.OfflineRepository
+import com.example.data.di.qualifier.OfflineRepository
 import com.example.data.repository.project_management.projects.ProjectsRepository
 import com.example.database.model.pm.project.ProjectsEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,15 +28,7 @@ class DatabaseViewModel @Inject constructor(
             )*/
 
     init {
-        viewModelScope.launch {
-            projectsRepository.countProjects22().collect{
-                Timber.d(it.toString())
-            }
 
-            projectsFlow.collect{
-                Timber.d(it.toString())
-            }
-        }
     }
 
 

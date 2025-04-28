@@ -23,9 +23,9 @@ import android.content.IntentFilter
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.tracing.trace
-import com.example.data.di.AppDispatcher
+import com.example.data.di.qualifier.AppDispatcher
 import com.example.data.di.ApplicationScope
-import com.example.data.di.Dispatcher
+import com.example.data.di.qualifier.Dispatcher
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

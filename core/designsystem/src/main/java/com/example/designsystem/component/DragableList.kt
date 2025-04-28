@@ -43,7 +43,6 @@ fun rememberDragDropState(
     onMove: (Int, Int) -> Unit,
     draggableItemsNum: Int
 ): DragDropState {
-
     val state =
         remember(lazyListState) {
             DragDropState(

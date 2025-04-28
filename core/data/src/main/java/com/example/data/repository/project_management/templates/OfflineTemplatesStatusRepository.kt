@@ -1,9 +1,9 @@
 package com.example.data.repository.project_management.templates
 
-import com.example.data.di.AppDispatcher
-import com.example.data.di.Dispatcher
-import com.example.database.dao.ProjectManagementDao
-import com.example.database.model.pm.templates.TemplatesStatusEntity
+import com.example.data.di.qualifier.AppDispatcher
+import com.example.data.di.qualifier.Dispatcher
+import com.example.database.dao.ProjectsManagementDao
+import com.example.database.model.pm.templates_statuses.TemplatesStatusEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 
 class OfflineTemplatesStatusRepository @Inject constructor(
-    private val projectManagementDao: ProjectManagementDao,
+    private val projectManagementDao: ProjectsManagementDao,
     @Dispatcher(AppDispatcher.IO) private val ioDispatcher: CoroutineDispatcher,
 ): TemplatesStatusRepository {
 
@@ -44,7 +44,7 @@ class OfflineTemplatesStatusRepository @Inject constructor(
 
     override suspend fun insertOrReplaceTemplateStatus(templateStatus: TemplatesStatusEntity) {
         withContext(ioDispatcher){
-            projectManagementDao.insertOrReplaceTemplateStatus(templateStatus)
+            projectManagementDao.upsertTemplateStatus(templateStatus)
         }
     }
 

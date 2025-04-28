@@ -1,5 +1,7 @@
 package com.example.data.di
 
+import com.example.data.di.qualifier.AppDispatcher
+import com.example.data.di.qualifier.Dispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

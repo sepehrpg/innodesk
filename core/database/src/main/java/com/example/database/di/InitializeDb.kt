@@ -1,15 +1,12 @@
 package com.example.database.di
 
 import android.content.Context
-import android.util.Log
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.database.dao.ProjectManagementDao
+import com.example.database.dao.ProjectsManagementDao
 import com.example.database.di.DatabaseModule.providesDatabase
-import com.example.database.model.pm.templates.TemplatesEntity
-import com.example.database.model.pm.templates.TemplatesStatusEntity
+import com.example.database.model.pm.templates_statuses.TemplatesEntity
+import com.example.database.model.pm.templates_statuses.TemplatesStatusEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +26,7 @@ fun createDatabaseCallback(context: Context): RoomDatabase.Callback {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             Executors.newSingleThreadExecutor().execute {
-                val projectDao: ProjectManagementDao = providesDatabase(context).projectManagementDao()
+                val projectDao: ProjectsManagementDao = providesDatabase(context).projectManagementDao()
                 initializeProjectDao(projectDao)
             }
         }
@@ -37,7 +34,7 @@ fun createDatabaseCallback(context: Context): RoomDatabase.Callback {
 }
 
 
-private fun initializeProjectDao(projectDao: ProjectManagementDao){
+private fun initializeProjectDao(projectDao: ProjectsManagementDao){
     CoroutineScope(Dispatchers.IO).launch {
         Timber.d("initializeProjectDao")
         projectDao.insertTemplateWithStatuses(

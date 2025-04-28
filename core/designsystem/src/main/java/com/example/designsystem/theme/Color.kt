@@ -29,6 +29,7 @@ val ClickUpGray1 = Color(0xffF2F3F6)
 val ClickUpGray2 = Color(0xFFF6F7F9)
 val ClickUpGray3 = Color(0xFFEDEEF2)
 val ClickUpGray4 = Color(0xFFF5F6FA)
+val ClickUpGray5 = Color(0xFF87909F)
 val ClickUpPink1 = Color(0xFFFB71AE)
 
 

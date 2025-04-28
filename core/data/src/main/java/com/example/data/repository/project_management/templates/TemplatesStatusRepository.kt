@@ -1,7 +1,6 @@
 package com.example.data.repository.project_management.templates
 
-import com.example.database.model.pm.templates.TemplatesEntity
-import com.example.database.model.pm.templates.TemplatesStatusEntity
+import com.example.database.model.pm.templates_statuses.TemplatesStatusEntity
 import kotlinx.coroutines.flow.Flow
 
 

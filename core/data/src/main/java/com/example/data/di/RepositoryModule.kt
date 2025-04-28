@@ -1,7 +1,10 @@
 package com.example.data.di
 
+import com.example.data.di.qualifier.OfflineRepository
 import com.example.data.repository.project_management.projects.OfflineProjectsRepository
 import com.example.data.repository.project_management.projects.ProjectsRepository
+import com.example.data.repository.project_management.tasks.OfflineTasksRepository
+import com.example.data.repository.project_management.tasks.TasksRepository
 import com.example.data.repository.project_management.templates.OfflineTemplatesRepository
 import com.example.data.repository.project_management.templates.OfflineTemplatesStatusRepository
 import com.example.data.repository.project_management.templates.TemplatesRepository
@@ -32,5 +35,11 @@ abstract class RepositoryModule {
     internal abstract fun bindsTemplatesStatusRepository(
         templatesRepository: OfflineTemplatesStatusRepository,
     ): TemplatesStatusRepository
+
+    @Binds
+    @OfflineRepository
+    internal abstract fun bindsTasksRepository(
+        tasksRepository: OfflineTasksRepository,
+    ): TasksRepository
 
 }

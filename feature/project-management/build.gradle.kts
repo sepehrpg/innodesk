@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.project.android.feature)
 }
-val debugDebuggable by extra(true)
 
 android {
     namespace = "com.innodesk.project_management"

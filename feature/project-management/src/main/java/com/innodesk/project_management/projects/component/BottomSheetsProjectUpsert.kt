@@ -18,11 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.database.model.pm.project.ProjectAccess
 import com.example.database.model.pm.project.ProjectsEntity
 import com.example.designsystem.component.AppModalBottomSheet
 import com.example.designsystem.component.AppBottomSheetDragHandle
-import com.innodesk.project_management.projects.ProjectUpsertScreen
+import com.innodesk.project_management.projects.screen.ProjectUpsertScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

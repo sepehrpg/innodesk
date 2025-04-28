@@ -1,12 +1,15 @@
 package com.example.data.repository.project_management.projects
 
 import com.example.database.model.pm.project.ProjectsEntity
+import com.example.database.model.pm.project.relationships.ProjectWithTemplateAndStatuses
 import kotlinx.coroutines.flow.Flow
 
 interface ProjectsRepository {
     suspend fun insertProject(project: ProjectsEntity)
 
     suspend fun insertProjects(projects: List<ProjectsEntity>)
+
+    fun getProjectWithTemplateAndStatuses(projectId: Int): Flow<ProjectWithTemplateAndStatuses?>
 
     suspend fun updateProject(project: ProjectsEntity)
 
@@ -18,6 +21,5 @@ interface ProjectsRepository {
 
     fun countProjects(): Flow<Int>
 
-    fun countProjects22(): Flow<Int>
 }
 

@@ -1,13 +1,11 @@
 package com.example.data.repository.project_management.templates
 
-import com.example.data.di.AppDispatcher
-import com.example.data.di.Dispatcher
-import com.example.data.repository.project_management.projects.ProjectsRepository
-import com.example.database.dao.ProjectManagementDao
-import com.example.database.model.pm.project.ProjectsEntity
-import com.example.database.model.pm.templates.TemplateWithStatuses
-import com.example.database.model.pm.templates.TemplatesEntity
-import com.example.database.model.pm.templates.TemplatesStatusEntity
+import com.example.data.di.qualifier.AppDispatcher
+import com.example.data.di.qualifier.Dispatcher
+import com.example.database.dao.ProjectsManagementDao
+import com.example.database.model.pm.templates_statuses.relationships.TemplateWithStatuses
+import com.example.database.model.pm.templates_statuses.TemplatesEntity
+import com.example.database.model.pm.templates_statuses.TemplatesStatusEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -23,7 +21,7 @@ import javax.inject.Inject
 
 
 class OfflineTemplatesRepository @Inject constructor(
-    private val projectManagementDao: ProjectManagementDao,
+    private val projectManagementDao: ProjectsManagementDao,
     @Dispatcher(AppDispatcher.IO) private val ioDispatcher: CoroutineDispatcher,
 ): TemplatesRepository {
 
@@ -48,10 +46,10 @@ class OfflineTemplatesRepository @Inject constructor(
         }
     }
 
-    override suspend fun insertOrReplaceTemplate(template: TemplatesEntity) {
+    override suspend fun upsertTemplate(template: TemplatesEntity) {
         withContext(ioDispatcher){
             Timber.d("Call : insertOrReplaceTemplate")
-            projectManagementDao.insertOrReplaceTemplate(template)
+            projectManagementDao.upsertTemplate(template)
         }
     }
 
@@ -62,7 +60,7 @@ class OfflineTemplatesRepository @Inject constructor(
         }
     }
 
-    override fun templateList(): Flow<List<TemplatesEntity>> {
+    override fun templatesList(): Flow<List<TemplatesEntity>> {
         return projectManagementDao.templatesList()
             .onStart { Timber.d("Call Flow : templateList") }
             .onEach { Timber.d("On Each Call : templateList") }
@@ -70,6 +68,7 @@ class OfflineTemplatesRepository @Inject constructor(
     }
 
     override fun countTemplates(): Flow<Int> = projectManagementDao.countTemplates().flowOn(ioDispatcher)
+
 
     override suspend fun insertTemplateWithStatuses(
         template: TemplatesEntity,
@@ -91,8 +90,8 @@ class OfflineTemplatesRepository @Inject constructor(
         }
     }
 
-    override fun templateWithStatusList(templateId: Int): Flow<TemplateWithStatuses?> {
-        return projectManagementDao.templateWithStatusList(templateId)
+    override fun getTemplateWithStatus(templateId: Int): Flow<TemplateWithStatuses?> {
+        return projectManagementDao.getTemplateWithStatus(templateId)
             ?.catch {
                 emit(null)
             }

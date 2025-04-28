@@ -1,11 +1,8 @@
 package com.example.data.repository.project_management.templates
 
-import androidx.room.Query
-import androidx.room.Transaction
-import com.example.database.model.pm.project.ProjectsEntity
-import com.example.database.model.pm.templates.TemplateWithStatuses
-import com.example.database.model.pm.templates.TemplatesEntity
-import com.example.database.model.pm.templates.TemplatesStatusEntity
+import com.example.database.model.pm.templates_statuses.relationships.TemplateWithStatuses
+import com.example.database.model.pm.templates_statuses.TemplatesEntity
+import com.example.database.model.pm.templates_statuses.TemplatesStatusEntity
 import kotlinx.coroutines.flow.Flow
 
 
@@ -16,11 +13,11 @@ interface TemplatesRepository {
 
     suspend fun updateTemplate(template: TemplatesEntity)
 
-    suspend fun insertOrReplaceTemplate(template: TemplatesEntity)
+    suspend fun upsertTemplate(template: TemplatesEntity)
 
     suspend fun deleteTemplate(template: TemplatesEntity)
 
-    fun templateList(): Flow<List<TemplatesEntity>>
+    fun templatesList(): Flow<List<TemplatesEntity>>
 
     fun countTemplates(): Flow<Int>
 
@@ -28,5 +25,5 @@ interface TemplatesRepository {
     suspend fun insertTemplateWithStatuses(template: TemplatesEntity, statuses: List<TemplatesStatusEntity>)
     suspend fun updateTemplateWithStatuses(template: TemplatesEntity, statuses: List<TemplatesStatusEntity>)
 
-    fun templateWithStatusList(templateId: Int): Flow<TemplateWithStatuses?>
+    fun getTemplateWithStatus(templateId: Int): Flow<TemplateWithStatuses?>
 }

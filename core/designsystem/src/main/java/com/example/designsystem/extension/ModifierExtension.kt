@@ -48,6 +48,8 @@ fun Modifier.mirror(): Modifier {
     else
         this
 }
+
+
 @Stable
 fun Modifier.mirrorReverse(forceMirrorReverse:Boolean = false): Modifier {
         return if(forceMirrorReverse) this.scale(scaleX = -1f, scaleY = 1f)

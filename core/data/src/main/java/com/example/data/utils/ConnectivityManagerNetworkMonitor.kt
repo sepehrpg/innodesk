@@ -11,9 +11,8 @@ import android.net.NetworkRequest.Builder
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.core.content.getSystemService
-import androidx.tracing.trace
-import com.example.data.di.AppDispatcher
-import com.example.data.di.Dispatcher
+import com.example.data.di.qualifier.AppDispatcher
+import com.example.data.di.qualifier.Dispatcher
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose

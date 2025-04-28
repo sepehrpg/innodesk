@@ -1,9 +1,10 @@
 package com.example.data.repository.project_management.projects
 
-import com.example.data.di.AppDispatcher
-import com.example.data.di.Dispatcher
-import com.example.database.dao.ProjectManagementDao
+import com.example.data.di.qualifier.AppDispatcher
+import com.example.data.di.qualifier.Dispatcher
+import com.example.database.dao.ProjectsManagementDao
 import com.example.database.model.pm.project.ProjectsEntity
+import com.example.database.model.pm.project.relationships.ProjectWithTemplateAndStatuses
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 
 class OfflineProjectsRepository @Inject constructor(
-    private val projectManagementDao: ProjectManagementDao,
+    private val projectManagementDao: ProjectsManagementDao,
     @Dispatcher(AppDispatcher.IO) private val ioDispatcher: CoroutineDispatcher,
 ): ProjectsRepository {
     override suspend fun insertProject(project: ProjectsEntity) {
@@ -30,6 +31,9 @@ class OfflineProjectsRepository @Inject constructor(
             projectManagementDao.insertProjects(projects)
         }
     }
+
+    override fun getProjectWithTemplateAndStatuses(projectId: Int): Flow<ProjectWithTemplateAndStatuses?> =
+        projectManagementDao.getProjectWithTemplateAndStatuses(projectId).flowOn(ioDispatcher)
 
     override suspend fun updateProject(project: ProjectsEntity) {
         withContext(ioDispatcher){
@@ -54,14 +58,5 @@ class OfflineProjectsRepository @Inject constructor(
 
     override fun countProjects(): Flow<Int> = projectManagementDao.countProjects().flowOn(ioDispatcher)
 
-    override fun countProjects22(): Flow<Int> = flow {
-        Timber.d("countProjects22")
-        emit(1)
-        emit(2)
-        emit(3)
-        emit(4)
-        emit(5)
-    }.catch {
-        Timber.d("CATHcountProjects22")
-    }
+
 }

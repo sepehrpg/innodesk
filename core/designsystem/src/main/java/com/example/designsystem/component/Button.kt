@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -40,9 +41,56 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.designsystem.config.direction.AppDirection
 import com.example.designsystem.config.direction.LayoutDirections
+import com.example.designsystem.icon.AppIcons
 import com.example.designsystem.theme.Blue20
+import com.example.designsystem.theme.ClickUpGray4
+import com.example.designsystem.theme.ClickUpPink1
+
+
+//..................................................................................................
+@Composable
+fun AppDeleteButton(
+    text:String = "Delete",
+    onClick: () -> Unit
+){
+    AppElevatedButtonWithIcon(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth(),
+        elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation=0.dp, pressedElevation =2.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = ClickUpGray4,
+        ),
+        shape = RoundedCornerShape(10.dp),
+        content = {
+            Row(Modifier.padding(vertical = 5.dp), verticalAlignment = Alignment.CenterVertically){
+                AppIcon(AppIcons.Delete, contentDescription = null, tint = ClickUpPink1)
+                Spacer(Modifier.width(5.dp))
+                AppText(text, fontSize = 14.sp, modifier = Modifier.padding(top = 3.dp), color = ClickUpPink1)
+            }
+        }
+    )
+}
+
+
+@Preview(showBackground = true,showSystemUi = true, locale = "en")
+@Composable
+private fun AppButtonPreviewMain() {
+    CompositionLocalProvider(AppDirection.appLayoutDirectionProvider(LayoutDirections.LTR)) {
+        Column(Modifier.fillMaxSize()) {
+            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)) {
+                AppDeleteButton(){}
+            }
+        }
+    }
+}
+//..................................................................................................
+
+
+
 
 
 //App Button
@@ -379,7 +427,9 @@ private fun ButtonContent(
 private fun AppButtonPreview(){
     CompositionLocalProvider(AppDirection.appLayoutDirectionProvider(LayoutDirections.LTR)) {
         Column(Modifier.fillMaxSize()) {
-            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppButton(
                     onClick = {},
                     content = { Text("AppButton") },
@@ -393,7 +443,9 @@ private fun AppButtonPreview(){
                 )
             }
 
-            Box(Modifier.fillMaxWidth().padding(horizontal = 60.dp, vertical = 10.dp)){
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 60.dp, vertical = 10.dp)){
                 AppButtonWithIcon(
                     leadingIcon = {AppIcon(Icons.Rounded.Call,contentDescription = "")},
                     onClick = {},
@@ -408,7 +460,9 @@ private fun AppButtonPreview(){
                 )
             }
 
-            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppOutlinedButton(
                     onClick = {},
                     content = { Text(text = "HELLO WORK") },
@@ -427,7 +481,9 @@ private fun AppButtonPreview(){
                 )
             }
 
-            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppOutlinedButtonWithIcon(
                     onClick = {},
                     content = { Text(text = "AppOutlinedButtonWithIcon") },
@@ -448,7 +504,9 @@ private fun AppButtonPreview(){
                 )
             }
 
-            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppTextButton(
                     onClick = {},
                     content = { Text(text = "AppTextButton") },
@@ -456,7 +514,9 @@ private fun AppButtonPreview(){
                 )
             }
 
-            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppTextButtonWithIcon(
                     onClick = {},
                     content = { Text(text = "AppTextButtonWithIcon") },
@@ -465,7 +525,9 @@ private fun AppButtonPreview(){
                 )
             }
 
-            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppElevatedButton(
                     onClick = {},
                     content = { Text(text = "AppElevatedButton") },
@@ -480,7 +542,9 @@ private fun AppButtonPreview(){
                 )
             }
 
-            Box(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)){
+            Box(Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp)){
                 AppElevatedButtonWithIcon(
                     onClick = {},
                     leadingIcon = { AppIcon(Icons.Default.Favorite, contentDescription = null) },
@@ -491,6 +555,10 @@ private fun AppButtonPreview(){
         }
     }
 }
+
+
+
+
 
 
 
